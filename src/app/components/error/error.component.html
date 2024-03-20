@@ -1,0 +1,8 @@
+<ngb-alert *ngIf="errorService.globalError$ | async as error"
+           type="danger" class="position-relative pos-top  w-50  mx-auto z-3"
+           [dismissible]="true">
+	<strong>Error!</strong>
+  <span class="mx-3">{{error}}.</span>
+</ngb-alert>
+
+
