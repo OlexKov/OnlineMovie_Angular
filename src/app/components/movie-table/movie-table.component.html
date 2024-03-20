@@ -1,5 +1,5 @@
-<div>
-  <table class="example-table mat-elevation-z8" mat-table recycleRows [dataSource]="dataSource">
+<div class="mat-elevation-z8">
+  <table  mat-table recycleRows [dataSource]="dataSource">
     <!-- Position Column -->
     <ng-container matColumnDef="id">
       <th mat-header-cell *matHeaderCellDef> No. </th>
@@ -47,8 +47,14 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
-  <mat-progress-bar *ngIf="!dataSource" mode="indeterminate"></mat-progress-bar>
-  <mat-paginator class="mt-4" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+  @if(!dataSource)
+  {
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  }
+  @else if(dataSource.data.length > 5)
+  {
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+  }
 </div>
 
 
