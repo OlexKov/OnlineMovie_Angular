@@ -3,7 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from "./components/header/header.component";
 import { FooterComponent } from './components/footer/footer.component';
-import { MoviesService } from './services/movies.service';
 import { ErrorComponent } from "./components/error/error.component";
 import { MovieTableComponent } from "./components/movie-table/movie-table.component";
 
@@ -24,5 +23,5 @@ import { MovieTableComponent } from "./components/movie-table/movie-table.compon
 })
 export class AppComponent {
   title = 'OnlineMovie_Angular';
-  constructor(private http: HttpClient,private movieService:MoviesService){}
+  constructor(private http: HttpClient){}
 }

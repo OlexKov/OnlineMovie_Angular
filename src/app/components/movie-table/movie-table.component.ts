@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { Observable, delay } from 'rxjs';
 import { IMovie } from '../../models/IMovie';
 import { AsyncPipe, DatePipe, NgIf } from '@angular/common';
-import { MatTableModule } from '@angular/material/table';
+import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MoviesService } from '../../services/movies.service';
-import {MatProgressBarModule} from '@angular/material/progress-bar';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-movie-table',
@@ -14,12 +15,14 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
     MatTableModule,
     DatePipe,
     MatProgressBarModule,
-    NgIf
+    NgIf,
+    MatPaginator,
+    MatPaginatorModule,
   ],
   templateUrl: './movie-table.component.html',
   styleUrl: './movie-table.component.css',
 })
-export class MovieTableComponent implements OnInit {
+export class MovieTableComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = [
     'id',
     'year',
@@ -30,9 +33,21 @@ export class MovieTableComponent implements OnInit {
     'duration',
     'premium',
   ];
-  dataSource: Observable<IMovie[]>;
-  constructor(private movieService: MoviesService) {}
-  ngOnInit(): void {
-    this.dataSource = this.movieService.getAll().pipe(delay(0));
+
+  dataSource: MatTableDataSource<IMovie>;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+
+  ngAfterViewInit() {
+    this.movieService
+    .getAll()
+    .pipe(delay(1000))
+    .subscribe(
+      (res) => {
+        this.dataSource = new MatTableDataSource<IMovie>(res);
+        this.dataSource.paginator = this.paginator;
+      }
+    );
   }
+  constructor(private movieService: MoviesService) { }
+  ngOnInit(): void { }
 }
