@@ -17,12 +17,12 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
     MatProgressBarModule,
     NgIf,
     MatPaginator,
-    MatPaginatorModule,
+    MatPaginatorModule
   ],
   templateUrl: './movie-table.component.html',
   styleUrl: './movie-table.component.css',
 })
-export class MovieTableComponent implements OnInit, AfterViewInit {
+export class MovieTableComponent implements OnInit, AfterViewInit{
   displayedColumns: string[] = [
     'id',
     'year',
@@ -39,7 +39,7 @@ export class MovieTableComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.movieService
-    .getAll()
+    .take(0,10)
     .pipe(delay(1000))
     .subscribe(
       (res) => {
@@ -49,5 +49,8 @@ export class MovieTableComponent implements OnInit, AfterViewInit {
     );
   }
   constructor(private movieService: MoviesService) { }
-  ngOnInit(): void { }
+
+  ngOnInit(): void {
+
+   }
 }
