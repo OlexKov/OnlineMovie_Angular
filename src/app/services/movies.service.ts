@@ -26,7 +26,7 @@ export class MoviesService {
 
   private errorHendler(error:HttpErrorResponse)
   {
-    this.errorService.handle(error.error.message);
+     this.errorService.handle(error.error.message);
      return throwError(() => error.error.message);
   }
 }

@@ -25,6 +25,7 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 export class MovieTableComponent implements OnInit, AfterViewInit{
   displayedColumns: string[] = [
     'id',
+    'poster',
     'year',
     'name',
     'original',
