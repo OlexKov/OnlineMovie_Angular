@@ -1,25 +1,26 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Subject, throwError } from 'rxjs';
+import { throwError} from 'rxjs';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root'
+
 })
 export class ErrorService {
 
-  globalError$ = new Subject<string>()
+  constructor(private _snackBar: MatSnackBar){}
 
-  clearError(){
-    this.globalError$.next("");
+  get errorHendler():any {
+    return this.hendler.bind(this);
   }
 
-  errorHendler(error:HttpErrorResponse)
+  private hendler(error:HttpErrorResponse)
   {
-     this.globalError$.next(error.error.message);
-     return throwError(() => error.error.message);
-  }
-  handle(message:string)
-  {
-    this.globalError$.next(message);
+    this._snackBar.open(error.message,"close",{
+      duration: 3000,
+      // verticalPosition:'top'
+    });
+    return throwError(() => error.message);
   }
 }

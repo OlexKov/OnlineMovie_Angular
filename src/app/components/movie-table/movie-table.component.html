@@ -1,5 +1,6 @@
+<button class="mb-4" mat-raised-button color="primary" >Add movie </button>
 <div class="mat-elevation-z8">
-  <table  mat-table recycleRows [dataSource]="dataSource">
+   <table  mat-table recycleRows [dataSource]="dataSource">
     <!-- Position Column -->
     <ng-container matColumnDef="id">
       <th mat-header-cell *matHeaderCellDef> No. </th>
@@ -48,6 +49,24 @@
     <ng-container matColumnDef="premium">
       <th mat-header-cell *matHeaderCellDef> Premium </th>
       <td mat-cell *matCellDef="let element"> {{element.premiumName}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="edit">
+      <th mat-header-cell *matHeaderCellDef> </th>
+      <td mat-cell *matCellDef="let element">
+        <button mat-icon-button color="primary" >
+          <mat-icon color="success">edit</mat-icon>
+        </button>
+       </td>
+    </ng-container>
+
+    <ng-container matColumnDef="delete">
+      <th mat-header-cell *matHeaderCellDef> </th>
+      <td mat-cell *matCellDef="let element">
+        <button mat-icon-button color="primary" (click)="deleteMovie(element)" >
+          <mat-icon color="warn">delete</mat-icon>
+        </button>
+       </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

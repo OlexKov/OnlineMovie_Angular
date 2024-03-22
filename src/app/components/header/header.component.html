@@ -1,9 +1,19 @@
 
   <mat-toolbar color="primary" class="">
-    <button mat-icon-button>
-      <mat-icon>menu</mat-icon>
+    <button mat-icon-button routerLink="/">
+      <mat-icon>home</mat-icon>
     </button>
     <span>Online Movie</span>
+    <div class="d-flex gap-2 mx-5 align-items-center">
+      <div class="btn text-white d-flex gap-2 align-items-center"  routerLink="/movie-table">
+        <mat-icon>movie</mat-icon>
+        <span>Movies</span>
+      </div>
+      <div class="btn text-white d-flex gap-2 align-items-center"  routerLink="/staf-table">
+        <mat-icon>person</mat-icon>
+        <span>Stafs</span>
+      </div>
+    </div>
     <span class="example-spacer"></span>
     <button mat-icon-button>
       <mat-icon>favorite</mat-icon>

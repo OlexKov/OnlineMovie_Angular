@@ -3,7 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from "./components/header/header.component";
 import { FooterComponent } from './components/footer/footer.component';
-import { ErrorComponent } from "./components/error/error.component";
 import { MovieTableComponent } from "./components/movie-table/movie-table.component";
 
 
@@ -17,7 +16,6 @@ import { MovieTableComponent } from "./components/movie-table/movie-table.compon
         HttpClientModule,
         HeaderComponent,
         FooterComponent,
-        ErrorComponent,
         MovieTableComponent
     ]
 })
