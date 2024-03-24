@@ -1,5 +1,6 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { IStaf } from '../../models/IStaf';
+import { IStafCreationModel } from '../../models/IStafCreationModel';
 import { StafService } from '../../services/staf.service';
 import { delay } from 'rxjs';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
@@ -10,6 +11,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { DatePipe } from '@angular/common';
+import { NgOptimizedImage } from '@angular/common';
+import { lastValueFrom } from 'rxjs';
+import { RouterLink,Router } from '@angular/router';
+
+
 
 @Component({
   selector: 'app-staf-table',
@@ -20,12 +26,15 @@ import { DatePipe } from '@angular/common';
     MatPaginatorModule,
     MatIconModule,
     MatButtonModule,
-    DatePipe
+    DatePipe,
+    NgOptimizedImage,
+    RouterLink,
+
   ],
   templateUrl: './staf-table.component.html',
   styleUrl: './staf-table.component.css'
 })
-export class StafTableComponent implements  AfterViewInit {
+export class StafTableComponent implements AfterViewInit {
 
   displayedColumns: string[] = [
     'id',
@@ -39,8 +48,11 @@ export class StafTableComponent implements  AfterViewInit {
   ];
   dataSource: MatTableDataSource<IStaf>;
 
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  constructor(private stafService: StafService, public dialog: MatDialog) {}
+  constructor(private stafService: StafService,
+              public dialog: MatDialog,
+              private router:Router) { }
 
   updateTableData() {
     this.stafService
@@ -51,9 +63,29 @@ export class StafTableComponent implements  AfterViewInit {
         this.dataSource.paginator = this.paginator;
       });
   }
+
   ngAfterViewInit(): void {
     this.updateTableData();
   }
+
+
+
+  editStaf(staf: IStaf)
+  {
+     this.router.navigate(['add-edit-staf'],
+     {
+         queryParams:{
+          stafItem:JSON.stringify(staf),
+          title:"Edit Staf"
+         }
+     })
+  }
+
+  // createStaf()
+  // {
+  //   this.openEditDialog();
+  // }
+
   openDeleteDialog(staf: IStaf) {
     return this.dialog.open(ConfirmDialogComponent, {
       data: {
@@ -64,6 +96,7 @@ export class StafTableComponent implements  AfterViewInit {
       },
     });
   }
+
   deleteStaf(staf: IStaf) {
     this.openDeleteDialog(staf)
       .afterClosed()

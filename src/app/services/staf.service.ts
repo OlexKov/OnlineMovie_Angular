@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { ErrorService } from './error.service';
 import { IStaf } from '../models/IStaf';
 import { Observable, catchError } from 'rxjs';
+import { IStafRole } from '../models/IStafRole';
+import { IMovie } from '../models/IMovie';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +17,19 @@ export class StafService {
       .get<IStaf[]>('https://localhost:7158/api/Staf/getall', {observe: 'response'})
       .pipe(catchError(this.errorService.errorHendler));
   }
+
+  getroles(id:number): Observable<HttpResponse<IStafRole[]>> {
+    return this.http
+      .get<IStaf[]>(`https://localhost:7158/api/Staf/getroles/${id}`, {observe: 'response'})
+      .pipe(catchError(this.errorService.errorHendler));
+  }
+
+  getmovies(id:number): Observable<HttpResponse<IMovie[]>> {
+    return this.http
+      .get<IMovie[]>(`https://localhost:7158/api/Staf/getmovies/${id}`, {observe: 'response'})
+      .pipe(catchError(this.errorService.errorHendler));
+  }
+
   remove(id: number): Observable<HttpResponse<object>> {
     return this.http
       .delete(`https://localhost:7158/api/Staf/delete/${id}`, {observe: 'response'})

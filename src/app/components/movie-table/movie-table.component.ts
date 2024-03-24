@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { Observable, delay } from 'rxjs';
+import { delay } from 'rxjs';
 import { IMovie } from '../../models/IMovie';
 import { DatePipe} from '@angular/common';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
@@ -10,6 +10,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
+import { NgOptimizedImage } from '@angular/common';
 
 @Component({
   selector: 'app-movie-table',
@@ -22,6 +23,7 @@ import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.compone
     MatPaginatorModule,
     MatIconModule,
     MatButtonModule,
+    NgOptimizedImage
   ],
   templateUrl: './movie-table.component.html',
   styleUrl: './movie-table.component.css',

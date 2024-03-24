@@ -1,0 +1,56 @@
+<h2 >{{title}}</h2>
+<div>
+  <form class="d-flex flex-column  p-4 mt-4 gap-2" [formGroup]="creationForm" (ngSubmit)="saveStaf()">
+    <input formControlName="id" type="number" class="form-control d-none" />
+    <div class="d-flex gap-2">
+      <mat-form-field class="flex-fill" required>
+        <mat-label>Name</mat-label>
+        <input formControlName="name" matInput>
+      </mat-form-field>
+      <mat-form-field class="flex-fill" required>
+        <mat-label>Surname</mat-label>
+        <input formControlName="surname" matInput>
+      </mat-form-field>
+      <mat-form-field class="flex-fill" required>
+        <mat-label>Country</mat-label>
+        <mat-select formControlName="countryId">
+          @for (item of countries ; track $index)
+          {
+          <mat-option [value]="item.id">{{item.name}}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <mat-form-field>
+      <mat-label>Description</mat-label>
+      <textarea formControlName="description" matInput></textarea>
+    </mat-form-field>
+
+
+    <mat-form-field>
+      <mat-label>Movies</mat-label>
+      <mat-select multiple="true" formControlName="movies" required>
+        @for (item of movies ; track $index)
+        {
+        <mat-option [value]="item.id">{{item.name}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Roles</mat-label>
+      <mat-select multiple="true" formControlName="roles" required>
+        @for (item of roles; track $index)
+        {
+        <mat-option [value]="item.id">{{item.name}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+
+      <button type="submit" mat-raised-button color="accent" mat-dialog-close>Save</button>
+      <button mat-raised-button mat-dialog-close cdkFocusInitial>Cancel</button>
+
+  </form>
+</div>

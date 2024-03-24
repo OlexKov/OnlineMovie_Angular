@@ -10,7 +10,7 @@
     <ng-container matColumnDef="poster">
       <th mat-header-cell *matHeaderCellDef> Poster </th>
       <td mat-cell *matCellDef="let element">
-        <img src="{{element.poster}}"/>
+        <img ngSrc = "{{element.poster}}" width="49" height="70" fetchpriority="low" priority />
       </td>
     </ng-container>
     <ng-container matColumnDef="year">
