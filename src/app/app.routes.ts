@@ -10,7 +10,4 @@ export const routes: Routes = [
   { path: 'staf-table', component: StafTableComponent },
   { path: 'add-edit-staf', component: StafAddEditComponent  },
   { path: '**', component: NotFoundComponent  }
-
-
-
 ];

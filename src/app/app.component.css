@@ -6,4 +6,6 @@
   margin:80px auto 20px auto ;
   flex-grow: 1;
   z-index: 0;
+  overflow: auto;
+  padding: 10px;
 }

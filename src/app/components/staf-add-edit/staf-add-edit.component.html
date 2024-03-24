@@ -1,56 +1,100 @@
-<h2 >{{title}}</h2>
+<h1>{{title}}</h1>
+<hr>
 <div>
-  <form class="d-flex flex-column  p-4 mt-4 gap-2" [formGroup]="creationForm" (ngSubmit)="saveStaf()">
+  <form class="d-flex flex-column  gap-2" [formGroup]="creationForm" (ngSubmit)="saveStaf()">
     <input formControlName="id" type="number" class="form-control d-none" />
-    <div class="d-flex gap-2">
-      <mat-form-field class="flex-fill" required>
-        <mat-label>Name</mat-label>
-        <input formControlName="name" matInput>
-      </mat-form-field>
-      <mat-form-field class="flex-fill" required>
-        <mat-label>Surname</mat-label>
-        <input formControlName="surname" matInput>
-      </mat-form-field>
-      <mat-form-field class="flex-fill" required>
-        <mat-label>Country</mat-label>
-        <mat-select formControlName="countryId">
-          @for (item of countries ; track $index)
-          {
-          <mat-option [value]="item.id">{{item.name}}</mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
+
+    <div class="d-flex gap-3">
+      <img ngSrc={{photo}} width="270" height="400" fetchpriority="low" priority />
+      <mat-grid-list cols="2"  class="flex-fill " rowHeight="75">
+        <mat-grid-tile>
+          <mat-form-field required>
+            <mat-label>Name</mat-label>
+            <input formControlName="name" matInput>
+          </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <mat-form-field required>
+            <mat-label>Surname</mat-label>
+            <input formControlName="surname" matInput>
+          </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <mat-form-field required>
+            <mat-label>Country</mat-label>
+            <mat-select formControlName="countryId">
+              @for (item of countries ; track $index)
+              {
+              <mat-option [value]="item.id">{{item.name}}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <mat-form-field class="example-form-field">
+            <mat-label>Birthdate</mat-label>
+            <input formControlName="birthdate" matInput [matDatepicker]="datepicker">
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matIconSuffix [for]="datepicker"></mat-datepicker-toggle>
+            <mat-datepicker #datepicker>
+              <mat-datepicker-actions>
+                <button mat-button matDatepickerCancel>Cancel</button>
+                <button mat-raised-button color="primary" matDatepickerApply>Apply</button>
+              </mat-datepicker-actions>
+            </mat-datepicker>
+          </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <mat-form-field>
+            <mat-label>Movies</mat-label>
+            <mat-select multiple="true" formControlName="movies" required>
+              @for (item of movies ; track $index)
+              {
+              <mat-option [value]="item.id">{{item.name}}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <mat-form-field>
+            <mat-label>Roles</mat-label>
+            <mat-select multiple="true" formControlName="roles" required>
+              @for (item of roles; track $index)
+              {
+              <mat-option [value]="item.id">{{item.name}}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <mat-form-field>
+            <mat-label >Oscar</mat-label>
+            <input hidden=true matInput>
+            <mat-checkbox class="mt-2" matInput formControlName="isOscar"><span>Has Oscar</span></mat-checkbox>
+          </mat-form-field>
+        </mat-grid-tile>
+      </mat-grid-list>
+
+    </div>
+    <hr>
+    <mat-form-field  >
+      <mat-label>Description</mat-label>
+      <textarea [rows]="5" style="height:auto" formControlName="description" matInput></textarea>
+    </mat-form-field>
+    <hr>
+
+
+
+
+
+
+
+    <div class="d-flex gap-3 justify-content-around">
+      <button type="submit" class="flex-fill" mat-raised-button color="primary">Save</button>
+      <button type="button" class="flex-fill" mat-raised-button color="" routerLink="/staf-table">Cancel</button>
     </div>
 
-    <mat-form-field>
-      <mat-label>Description</mat-label>
-      <textarea formControlName="description" matInput></textarea>
-    </mat-form-field>
 
-
-    <mat-form-field>
-      <mat-label>Movies</mat-label>
-      <mat-select multiple="true" formControlName="movies" required>
-        @for (item of movies ; track $index)
-        {
-        <mat-option [value]="item.id">{{item.name}}</mat-option>
-        }
-      </mat-select>
-    </mat-form-field>
-
-    <mat-form-field>
-      <mat-label>Roles</mat-label>
-      <mat-select multiple="true" formControlName="roles" required>
-        @for (item of roles; track $index)
-        {
-        <mat-option [value]="item.id">{{item.name}}</mat-option>
-        }
-      </mat-select>
-    </mat-form-field>
-
-
-      <button type="submit" mat-raised-button color="accent" mat-dialog-close>Save</button>
-      <button mat-raised-button mat-dialog-close cdkFocusInitial>Cancel</button>
 
   </form>
 </div>

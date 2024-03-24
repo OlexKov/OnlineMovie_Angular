@@ -13,6 +13,12 @@ import { IStafCreationModel } from '../../models/IStafCreationModel';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { RouterLink } from '@angular/router';
+import { NgOptimizedImage } from '@angular/common';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {provideNativeDateAdapter} from '@angular/material/core';
+import {MatGridListModule} from '@angular/material/grid-list';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-staf-add-edit',
@@ -21,10 +27,16 @@ import { MatButtonModule } from '@angular/material/button';
     ReactiveFormsModule,
     MatSelectModule,
     MatInputModule,
-    MatButtonModule
+    MatButtonModule,
+    RouterLink,
+    NgOptimizedImage,
+    MatDatepickerModule,
+    MatGridListModule,
+    MatCheckboxModule
    ],
   templateUrl: './staf-add-edit.component.html',
-  styleUrl: './staf-add-edit.component.css'
+  styleUrl: './staf-add-edit.component.css',
+  providers:[provideNativeDateAdapter()]
 })
 export class StafAddEditComponent implements OnInit {
   staf:IStaf
@@ -33,6 +45,7 @@ export class StafAddEditComponent implements OnInit {
   countries: ICountry[] | null;
   roles: IStafRole[] | null;
   movies: IMovie[] | null;
+  photo:string
   constructor(private route:ActivatedRoute,
               private dataService:DataService,
               private movieService:MoviesService,
@@ -80,7 +93,7 @@ export class StafAddEditComponent implements OnInit {
       roles: [null],
       file: [undefined],
     });
-
+    this.photo = this.staf.imageName;
   }
 
  async ngOnInit(){
