@@ -42,4 +42,10 @@ export class StafService {
       .put<any>(`https://localhost:7158/api/Staf/update`,stafForm, {observe: 'response',headers:hds})
       .pipe(catchError(this.errorService.errorHendler));
   }
+  create(stafForm:FormData): Observable<HttpResponse<object>> {
+    let hds = new HttpHeaders().append('enctype','multipart/form-data')
+    return this.http
+      .post<any>(`https://localhost:7158/api/Staf/create`,stafForm, {observe: 'response',headers:hds})
+      .pipe(catchError(this.errorService.errorHendler));
+  }
 }

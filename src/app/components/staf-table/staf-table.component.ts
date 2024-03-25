@@ -82,10 +82,16 @@ export class StafTableComponent implements AfterViewInit {
      })
   }
 
-  // createStaf()
-  // {
-  //   this.openEditDialog();
-  // }
+  createStaf()
+  {
+    this.router.navigate(['add-edit-staf'],
+    {
+        queryParams:{
+         stafItem:'',
+         title:"Add New Staf"
+        }
+    })
+  }
 
   openDeleteDialog(staf: IStaf) {
     return this.dialog.open(ConfirmDialogComponent, {

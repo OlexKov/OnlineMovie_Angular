@@ -25,6 +25,8 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { Router } from '@angular/router';
+import { DateAdapter } from '@angular/material/core';
+
 
 @Component({
   selector: 'app-staf-add-edit',
@@ -58,17 +60,53 @@ export class StafAddEditComponent implements OnInit {
     private movieService: MoviesService,
     private stafService: StafService,
     private fb: FormBuilder,
-    private router: Router
-  ) {
+    private router: Router ) {
     this.route.queryParams.subscribe((res) => {
-      this.staf = JSON.parse(res['stafItem']);
+      if (res['stafItem'] == '')
+        this.staf = {
+          id: 0,
+          name: '',
+          surname: '',
+          description: '',
+          imageName: '../assets/nophoto.jpeg.jpg',
+          countryName: '',
+          countryId: 0,
+          birthdate: new Date(),
+          isOscar: false,
+        };
+      else this.staf = JSON.parse(res['stafItem']);
       this.title = res['title'];
-    });
 
+    });
+  }
+
+  async formInit() {
+    let stafMovies = (
+      await lastValueFrom(this.stafService.getmovies(this.staf.id))
+    ).body?.map((x) => x.id);
+    let stafRoles = (
+      await lastValueFrom(this.stafService.getroles(this.staf.id))
+    ).body?.map((x) => x.id);
+    this.creationForm.setValue({
+      id: this.staf.id,
+      name: this.staf.name,
+      surname: this.staf.surname,
+      description: this.staf.description,
+      imageName: this.staf.imageName,
+      countryId: this.staf.countryId,
+      birthdate: this.staf.birthdate,
+      isOscar: this.staf.isOscar,
+      movies: stafMovies,
+      roles: stafRoles,
+      file: [null],
+    });
+  }
+
+  async ngOnInit() {
     this.creationForm = this.fb.group({
-      id: [this.staf.id],
+      id: [0],
       name: [
-        this.staf.name,
+        '',
         [
           Validators.required,
           Validators.minLength(3),
@@ -77,7 +115,7 @@ export class StafAddEditComponent implements OnInit {
         ],
       ],
       surname: [
-        this.staf.surname,
+        '',
         [
           Validators.required,
           Validators.minLength(3),
@@ -86,57 +124,54 @@ export class StafAddEditComponent implements OnInit {
         ],
       ],
       description: [
-        this.staf.description,
+        '',
         [
           Validators.required,
           Validators.minLength(30),
           Validators.maxLength(1024),
         ],
       ],
-      imageName: [this.staf.imageName, [Validators.maxLength(1024)]],
+      imageName: [''],
       file: [undefined],
       countryId: [null],
-      birthdate: [this.staf.birthdate],
-      isOscar: [this.staf.isOscar],
+      birthdate: [''],
+      isOscar: [false],
       movies: [[]],
       roles: [[]],
     });
-    this.photo = this.staf.imageName;
-  }
 
-  async ngOnInit() {
-    let stafMovies = (
-      await lastValueFrom(this.stafService.getmovies(this.staf.id))
-    ).body?.map((x) => x.id);
-    let stafRoles = (
-      await lastValueFrom(this.stafService.getroles(this.staf.id))
-    ).body?.map((x) => x.id);
+    if (this.staf.id != null) this.formInit();
+    this.photo = this.staf.imageName;
     this.countries = (await lastValueFrom(this.dataService.getCountries()))
       .body as Array<ICountry>;
     this.roles = (await lastValueFrom(this.dataService.getRoles()))
       .body as Array<IStafRole>;
     this.movies = (await lastValueFrom(this.movieService.getAll()))
       .body as Array<IMovie>;
-    this.creationForm.controls['countryId'].setValue(this.staf.countryId);
-    this.creationForm.controls['movies'].setValue(stafMovies);
-    this.creationForm.controls['roles'].setValue(stafRoles);
   }
 
-  saveStaf() {
+  async saveStaf() {
     const formData = new FormData();
-    let data;
+    const id = this.creationForm.controls['id'].value;
+    let responce: number = 0;
     for (let key in this.creationForm.controls) {
-      if(key=='roles' || key=='movies')
-        for (let item in this.creationForm.controls[key].value)
-            formData.append(key, item);
-      else
-        data = this.creationForm.controls[key].value
-      formData.append(key, data);
-    }
-    this.stafService.update(formData).subscribe((res) => {
-      if (res.status == 200) {
-        this.router.navigate(['/staf-table']);
+      if (key == 'roles' || key == 'movies') {
+        let data = this.creationForm.controls[key].value;
+        for (let i = 0; i < data.length; i++) formData.append(key, data[i]);
+      } else if(key == 'birthdate') {
+        const date = (this.creationForm.controls[key].value as Date).toDateString()
+        console.log(date)
+        formData.append(key,date);
       }
-    });
+      else
+       formData.append(key, this.creationForm.controls[key].value);
+    }
+    if (id != 0)
+      responce = (await lastValueFrom(this.stafService.update(formData)))
+        .status;
+    else
+      responce = (await lastValueFrom(this.stafService.create(formData)))
+        .status;
+    if (responce == 200) this.router.navigate(['/staf-table']);
   }
 }
