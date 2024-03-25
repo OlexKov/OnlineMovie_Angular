@@ -14,7 +14,6 @@ import { DataService } from '../../services/data.service';
 import { MoviesService } from '../../services/movies.service';
 import { StafService } from '../../services/staf.service';
 import { lastValueFrom } from 'rxjs';
-import { IStafCreationModel } from '../../models/IStafCreationModel';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -52,7 +51,7 @@ export class StafAddEditComponent implements OnInit {
   countries: ICountry[] | null;
   roles: IStafRole[] | null;
   movies: IMovie[] | null;
-  photo: string ;
+  photo: string;
   formData = new FormData();
   constructor(
     private route: ActivatedRoute,
@@ -78,7 +77,6 @@ export class StafAddEditComponent implements OnInit {
       else this.staf = JSON.parse(res['stafItem']) as IStaf;
       this.title = res['title'];
     });
-
   }
 
   async formInit() {
@@ -98,10 +96,8 @@ export class StafAddEditComponent implements OnInit {
       birthdate: this.staf.birthdate,
       isOscar: this.staf.isOscar,
       movies: stafMovies,
-      roles: stafRoles
-
+      roles: stafRoles,
     });
-
   }
 
   async ngOnInit() {
@@ -141,9 +137,8 @@ export class StafAddEditComponent implements OnInit {
       roles: [[]],
     });
 
-    if (this.staf.id != null)
-     this.formInit();
-     this.photo = this.staf.imageName;
+    if (this.staf.id != null) this.formInit();
+    this.photo = this.staf.imageName;
 
     this.countries = (await lastValueFrom(this.dataService.getCountries()))
       .body as Array<ICountry>;
@@ -160,34 +155,31 @@ export class StafAddEditComponent implements OnInit {
       if (key == 'roles' || key == 'movies') {
         let data = this.creationForm.controls[key].value;
         for (let i = 0; i < data.length; i++)
-           this.formData.append(key, data[i]);
-      }
-      else if(key == 'birthdate')
-      {
-        const date = (this.creationForm.controls[key].value as Date);
-        if(typeof(date) != 'string')
-            this.formData.append(key,date.toLocaleDateString());
-        else
-            this.formData.append(key,this.creationForm.controls[key].value)
-      }
-      else this.formData.append(key, this.creationForm.controls[key].value);
+          this.formData.append(key, data[i]);
+      } else if (key == 'birthdate') {
+        const date = this.creationForm.controls[key].value as Date;
+        if (typeof date != 'string')
+          this.formData.append(key, date.toLocaleDateString());
+        else this.formData.append(key, this.creationForm.controls[key].value);
+      } else this.formData.append(key, this.creationForm.controls[key].value);
     }
     if (id != 0)
-      responce = (await lastValueFrom(this.stafService.update(this.formData))).status;
+      responce = (await lastValueFrom(this.stafService.update(this.formData)))
+        .status;
     else
-      responce = (await lastValueFrom(this.stafService.create(this.formData))).status;
+      responce = (await lastValueFrom(this.stafService.create(this.formData)))
+        .status;
     if (responce == 200) this.router.navigate(['/staf-table']);
   }
 
-   async loadPhoto(event: any) {
-    const file:File = event.target.files[0];
+  async loadPhoto(event: any) {
+    const file: File = event.target.files[0];
     this.creationForm.controls['imageFile'].setValue(file);
-    if (file){
-      this.photo = await ImageProcessor.loadImageFromFile(file)
-      this.formData.set('imageFile', file,file.name);
-    }
-    else{
-      this.formData.set('imageFile','')
+    if (file) {
+      this.photo = await ImageProcessor.loadImageFromFile(file);
+      this.formData.set('imageFile', file, file.name);
+    } else {
+      this.formData.set('imageFile', '');
       this.photo = this.staf.imageName;
     }
   }
