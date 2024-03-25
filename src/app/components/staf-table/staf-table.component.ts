@@ -43,6 +43,7 @@ export class StafTableComponent implements AfterViewInit {
     'name',
     'surname',
     'country',
+    'oscar',
     'edit',
     'delete',
   ];

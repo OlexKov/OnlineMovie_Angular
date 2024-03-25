@@ -9,10 +9,11 @@ export interface IStafCreationModel
   surname:string
   description:string
   imageName:string
+  file:File
   countryId:number
-  birthdate:Date
+  birthdate:string
   isOscar:boolean
   movies:number[] | undefined
   roles:number [] | undefined
-  file:File
+
 }

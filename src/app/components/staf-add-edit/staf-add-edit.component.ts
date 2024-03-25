@@ -1,7 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { IStaf } from '../../models/IStaf';
-import { FormBuilder, FormGroup, Validators,ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { ICountry } from '../../models/ICountry';
 import { IStafRole } from '../../models/IStafRole';
 import { IMovie } from '../../models/IMovie';
@@ -15,10 +20,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
 import { NgOptimizedImage } from '@angular/common';
-import {MatDatepickerModule} from '@angular/material/datepicker';
-import {provideNativeDateAdapter} from '@angular/material/core';
-import {MatGridListModule} from '@angular/material/grid-list';
-import {MatCheckboxModule} from '@angular/material/checkbox';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { provideNativeDateAdapter } from '@angular/material/core';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-staf-add-edit',
@@ -32,35 +38,37 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
     NgOptimizedImage,
     MatDatepickerModule,
     MatGridListModule,
-    MatCheckboxModule
-   ],
+    MatCheckboxModule,
+  ],
   templateUrl: './staf-add-edit.component.html',
   styleUrl: './staf-add-edit.component.css',
-  providers:[provideNativeDateAdapter()]
+  providers: [provideNativeDateAdapter()],
 })
 export class StafAddEditComponent implements OnInit {
-  staf:IStaf
-  title:string
+  staf: IStaf;
+  title: string;
   creationForm: FormGroup;
   countries: ICountry[] | null;
   roles: IStafRole[] | null;
   movies: IMovie[] | null;
-  photo:string
-  constructor(private route:ActivatedRoute,
-              private dataService:DataService,
-              private movieService:MoviesService,
-              private stafService:StafService,
-              private fb: FormBuilder)
-  {
-    this.route.queryParams.subscribe((res)=>{
+  photo: string;
+  constructor(
+    private route: ActivatedRoute,
+    private dataService: DataService,
+    private movieService: MoviesService,
+    private stafService: StafService,
+    private fb: FormBuilder,
+    private router: Router
+  ) {
+    this.route.queryParams.subscribe((res) => {
       this.staf = JSON.parse(res['stafItem']);
-      this.title = res['title']
-    })
+      this.title = res['title'];
+    });
 
     this.creationForm = this.fb.group({
       id: [this.staf.id],
       name: [
-       this.staf.name,
+        this.staf.name,
         [
           Validators.required,
           Validators.minLength(3),
@@ -85,30 +93,50 @@ export class StafAddEditComponent implements OnInit {
           Validators.maxLength(1024),
         ],
       ],
-      image: [this.staf.imageName, [Validators.maxLength(1024)]],
-      countryId:[null],
+      imageName: [this.staf.imageName, [Validators.maxLength(1024)]],
+      file: [undefined],
+      countryId: [null],
       birthdate: [this.staf.birthdate],
       isOscar: [this.staf.isOscar],
-      movies: [null],
-      roles: [null],
-      file: [undefined],
+      movies: [[]],
+      roles: [[]],
     });
     this.photo = this.staf.imageName;
   }
 
- async ngOnInit(){
-      let stafMovies = (await lastValueFrom(this.stafService.getmovies(this.staf.id))).body?.map(x=>x.id)
-      let stafRoles = (await lastValueFrom(this.stafService.getroles(this.staf.id))).body?.map(x=>x.id)
-      this.countries = (await lastValueFrom(this.dataService.getCountries())).body as Array<ICountry> ;
-      this.roles = (await lastValueFrom( this.dataService.getRoles())).body as Array<IStafRole>;
-      this.movies =(await lastValueFrom(this.movieService.getAll())).body as Array<IMovie>;
-      this.creationForm.controls['countryId']?.setValue(this.staf.countryId);
-      this.creationForm.controls['movies']?.setValue(stafMovies);
-      this.creationForm.controls['roles']?.setValue(stafRoles);
+  async ngOnInit() {
+    let stafMovies = (
+      await lastValueFrom(this.stafService.getmovies(this.staf.id))
+    ).body?.map((x) => x.id);
+    let stafRoles = (
+      await lastValueFrom(this.stafService.getroles(this.staf.id))
+    ).body?.map((x) => x.id);
+    this.countries = (await lastValueFrom(this.dataService.getCountries()))
+      .body as Array<ICountry>;
+    this.roles = (await lastValueFrom(this.dataService.getRoles()))
+      .body as Array<IStafRole>;
+    this.movies = (await lastValueFrom(this.movieService.getAll()))
+      .body as Array<IMovie>;
+    this.creationForm.controls['countryId'].setValue(this.staf.countryId);
+    this.creationForm.controls['movies'].setValue(stafMovies);
+    this.creationForm.controls['roles'].setValue(stafRoles);
   }
 
   saveStaf() {
-    console.log(this.creationForm.value);
+    const formData = new FormData();
+    let data;
+    for (let key in this.creationForm.controls) {
+      if(key=='roles' || key=='movies')
+        for (let item in this.creationForm.controls[key].value)
+            formData.append(key, item);
+      else
+        data = this.creationForm.controls[key].value
+      formData.append(key, data);
+    }
+    this.stafService.update(formData).subscribe((res) => {
+      if (res.status == 200) {
+        this.router.navigate(['/staf-table']);
+      }
+    });
   }
-
 }
