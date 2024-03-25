@@ -5,7 +5,10 @@
     <input formControlName="id" type="number" class="form-control d-none" />
 
     <div class="d-flex gap-3">
-      <img ngSrc={{photo}} width="270" height="400" fetchpriority="low" priority />
+      <div class="d-flex gap-3 flex-column">
+        <img [ngSrc]="photo" width="270" height="400" fetchpriority="low" priority />
+        <input type="file" accept="image/png, image/jpeg, image/webp ,imaje/jpg"  class="flex-fill" (change)="loadPhoto($event)" />
+      </div>
       <mat-grid-list cols="2"  class="flex-fill " rowHeight="75">
         <mat-grid-tile>
           <mat-form-field required>

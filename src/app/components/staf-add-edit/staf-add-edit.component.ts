@@ -25,8 +25,7 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { Router } from '@angular/router';
-import { DateAdapter } from '@angular/material/core';
-
+import { ImageProcessor } from '../helpers/file-loader';
 
 @Component({
   selector: 'app-staf-add-edit',
@@ -53,14 +52,15 @@ export class StafAddEditComponent implements OnInit {
   countries: ICountry[] | null;
   roles: IStafRole[] | null;
   movies: IMovie[] | null;
-  photo: string;
+  photo: string ;
   constructor(
     private route: ActivatedRoute,
     private dataService: DataService,
     private movieService: MoviesService,
     private stafService: StafService,
     private fb: FormBuilder,
-    private router: Router ) {
+    private router: Router
+  ) {
     this.route.queryParams.subscribe((res) => {
       if (res['stafItem'] == '')
         this.staf = {
@@ -76,7 +76,6 @@ export class StafAddEditComponent implements OnInit {
         };
       else this.staf = JSON.parse(res['stafItem']);
       this.title = res['title'];
-
     });
   }
 
@@ -98,7 +97,7 @@ export class StafAddEditComponent implements OnInit {
       isOscar: this.staf.isOscar,
       movies: stafMovies,
       roles: stafRoles,
-      file: [null],
+      imageFile: [null],
     });
   }
 
@@ -132,7 +131,7 @@ export class StafAddEditComponent implements OnInit {
         ],
       ],
       imageName: [''],
-      file: [undefined],
+      imageFile: [undefined],
       countryId: [null],
       birthdate: [''],
       isOscar: [false],
@@ -158,20 +157,31 @@ export class StafAddEditComponent implements OnInit {
       if (key == 'roles' || key == 'movies') {
         let data = this.creationForm.controls[key].value;
         for (let i = 0; i < data.length; i++) formData.append(key, data[i]);
-      } else if(key == 'birthdate') {
-        const date = (this.creationForm.controls[key].value as Date).toDateString()
-        console.log(date)
-        formData.append(key,date);
       }
-      else
-       formData.append(key, this.creationForm.controls[key].value);
+      else if (key == 'birthdate') {
+        const date = (this.creationForm.controls[key].value as Date).toDateString();
+        formData.append(key, date);
+      }
+      else if (key == 'imageFile')
+        formData.append(
+           key,
+          this.creationForm.controls[key].value,
+          this.creationForm.controls[key].value.name
+        );
+      else formData.append(key, this.creationForm.controls[key].value);
     }
     if (id != 0)
-      responce = (await lastValueFrom(this.stafService.update(formData)))
-        .status;
+      responce = (await lastValueFrom(this.stafService.update(formData))).status;
     else
-      responce = (await lastValueFrom(this.stafService.create(formData)))
-        .status;
+      responce = (await lastValueFrom(this.stafService.create(formData))).status;
     if (responce == 200) this.router.navigate(['/staf-table']);
+  }
+
+  async loadPhoto(event: any) {
+    const file:File = event.target.files[0];
+    this.creationForm.controls['imageFile'].setValue(file);
+    if (file)
+      this.photo = await ImageProcessor.loadImageFromFile(file)
+    else this.photo = this.staf.imageName;
   }
 }
