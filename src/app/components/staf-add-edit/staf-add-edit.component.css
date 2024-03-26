@@ -10,7 +10,14 @@ h1{
   font-size: 30px;
   font-weight: bold;
 }
-.validator{
-  color:red;
-  font-size: 12px;
+
+.image-container{
+  width: 270px;
+  height: 400px;
+  padding:  3px ;
+}
+.image-container img{
+  width: 100%;
+  height: 100%;
+  object-fit:cover;
 }
