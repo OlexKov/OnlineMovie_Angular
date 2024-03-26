@@ -7,23 +7,35 @@
     <div class="d-flex gap-3">
       <div class="d-flex gap-3 flex-column">
         <img [ngSrc]="photo" width="270" height="400" fetchpriority="low" priority />
-        <input type="file" accept="image/png, image/jpeg, image/webp ,imaje/jpg"  class="flex-fill" (change)="loadPhoto($event)" />
+        <input type="file" accept="image/png, image/jpeg, image/webp ,imaje/jpg" class="flex-fill"
+          (change)="loadPhoto($event)" />
       </div>
-      <mat-grid-list cols="2"  class="flex-fill " rowHeight="75">
+      <mat-grid-list cols="2" class="flex-fill " rowHeight="90">
+
         <mat-grid-tile>
-          <mat-form-field required>
+          <mat-form-field appearance="outline">
             <mat-label>Name</mat-label>
             <input formControlName="name" matInput>
+            @if(formValidators.isError(creationForm,'name'))
+            {
+               <mat-error> {{formValidators.validate(creationForm,'name','Name')}}</mat-error>
+            }
           </mat-form-field>
         </mat-grid-tile>
+
         <mat-grid-tile>
-          <mat-form-field required>
+          <mat-form-field appearance="outline">
             <mat-label>Surname</mat-label>
             <input formControlName="surname" matInput>
+            @if(formValidators.isError(creationForm,'surname'))
+            {
+               <mat-error> {{formValidators.validate(creationForm,'surname','Surname')}}</mat-error>
+            }
           </mat-form-field>
         </mat-grid-tile>
+
         <mat-grid-tile>
-          <mat-form-field required>
+          <mat-form-field >
             <mat-label>Country</mat-label>
             <mat-select formControlName="countryId">
               @for (item of countries ; track $index)
@@ -31,14 +43,18 @@
               <mat-option [value]="item.id">{{item.name}}</mat-option>
               }
             </mat-select>
+            @if(formValidators.isError(creationForm,'countryId'))
+            {
+               <mat-error> {{formValidators.validate(creationForm,'countryId','Country')}}</mat-error>
+            }
           </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
           <mat-form-field class="example-form-field">
             <mat-label>Birthdate</mat-label>
-            <input formControlName="birthdate" matInput [matDatepicker]="datepicker">
+            <input formControlName="birthdate" [max]="today" matInput [matDatepicker]="datepicker">
             <mat-hint>MM/DD/YYYY</mat-hint>
-            <mat-datepicker-toggle  matIconSuffix [for]="datepicker"></mat-datepicker-toggle>
+            <mat-datepicker-toggle matIconSuffix  [for]="datepicker"></mat-datepicker-toggle>
             <mat-datepicker #datepicker>
               <mat-datepicker-actions>
                 <button mat-button matDatepickerCancel>Cancel</button>
@@ -50,10 +66,10 @@
         <mat-grid-tile>
           <mat-form-field>
             <mat-label>Movies</mat-label>
-            <mat-select multiple="true" formControlName="movies" required>
+            <mat-select multiple="true" formControlName="movies">
               @for (item of movies ; track $index)
               {
-              <mat-option [value]="item.id">{{item.name}}</mat-option>
+                 <mat-option [value]="item.id">{{item.name}}</mat-option>
               }
             </mat-select>
           </mat-form-field>
@@ -61,17 +77,21 @@
         <mat-grid-tile>
           <mat-form-field>
             <mat-label>Roles</mat-label>
-            <mat-select multiple="true" formControlName="roles" required>
+            <mat-select multiple="true" formControlName="roles">
               @for (item of roles; track $index)
               {
               <mat-option [value]="item.id">{{item.name}}</mat-option>
               }
             </mat-select>
+            @if(formValidators.isError(creationForm,'roles'))
+            {
+               <mat-error> {{formValidators.validate(creationForm,'roles','Role')}}</mat-error>
+            }
           </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
           <mat-form-field>
-            <mat-label >Oscar</mat-label>
+            <mat-label>Oscar</mat-label>
             <input hidden=true matInput>
             <mat-checkbox class="mt-2" matInput formControlName="isOscar"><span>Has Oscar</span></mat-checkbox>
           </mat-form-field>
@@ -80,20 +100,19 @@
 
     </div>
     <hr>
-    <mat-form-field  >
+    <mat-form-field appearance="outline">
       <mat-label>Description</mat-label>
       <textarea [rows]="5" style="height:auto" formControlName="description" matInput></textarea>
+      @if(formValidators.isError(creationForm,'description'))
+      {
+         <mat-error> {{formValidators.validate(creationForm,'description','Description')}}</mat-error>
+      }
     </mat-form-field>
     <hr>
 
-
-
-
-
-
-
     <div class="d-flex gap-3 justify-content-around">
-      <button type="submit" class="flex-fill" mat-raised-button color="primary">Save</button>
+      <button type="submit" class="flex-fill"  mat-raised-button
+        color="primary">Save</button>
       <button type="button" class="flex-fill" mat-raised-button color="" routerLink="/staf-table">Cancel</button>
     </div>
 

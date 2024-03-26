@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { IStaf } from '../../models/IStaf';
 import {
@@ -25,6 +25,9 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { Router } from '@angular/router';
 import { ImageProcessor } from '../helpers/file-loader';
+import { FormValidators } from '../helpers/validators';
+
+
 
 @Component({
   selector: 'app-staf-add-edit',
@@ -53,6 +56,8 @@ export class StafAddEditComponent implements OnInit {
   movies: IMovie[] | null;
   photo: string;
   formData = new FormData();
+  today:Date = new Date();
+
   constructor(
     private route: ActivatedRoute,
     private dataService: DataService,
@@ -79,6 +84,11 @@ export class StafAddEditComponent implements OnInit {
     });
   }
 
+  get  formValidators():typeof FormValidators
+  {
+    return FormValidators
+  }
+
   async formInit() {
     let stafMovies = (
       await lastValueFrom(this.stafService.getmovies(this.staf.id))
@@ -86,12 +96,14 @@ export class StafAddEditComponent implements OnInit {
     let stafRoles = (
       await lastValueFrom(this.stafService.getroles(this.staf.id))
     ).body?.map((x) => x.id);
+
     this.creationForm.setValue({
       id: this.staf.id,
       name: this.staf.name,
       surname: this.staf.surname,
       description: this.staf.description,
       imageName: this.staf.imageName,
+      imageFile: File,
       countryId: this.staf.countryId,
       birthdate: this.staf.birthdate,
       isOscar: this.staf.isOscar,
@@ -109,7 +121,7 @@ export class StafAddEditComponent implements OnInit {
           Validators.required,
           Validators.minLength(3),
           Validators.maxLength(25),
-          Validators.pattern('^[A-Z].*'),
+          Validators.pattern('^[A-Z А-Я].*'),
         ],
       ],
       surname: [
@@ -118,7 +130,7 @@ export class StafAddEditComponent implements OnInit {
           Validators.required,
           Validators.minLength(3),
           Validators.maxLength(25),
-          Validators.pattern('^[A-Z].*'),
+          Validators.pattern('^[A-Z А-Я].*'),
         ],
       ],
       description: [
@@ -130,15 +142,16 @@ export class StafAddEditComponent implements OnInit {
         ],
       ],
       imageName: [''],
-      countryId: [null],
+      imageFile: [null],
+      countryId: [null,[Validators.min(1)]],
       birthdate: [''],
       isOscar: [false],
       movies: [[]],
-      roles: [[]],
+      roles: [[],Validators.required],
     });
 
     if (this.staf.id != null) this.formInit();
-    this.photo = this.staf.imageName;
+        this.photo = this.staf.imageName;
 
     this.countries = (await lastValueFrom(this.dataService.getCountries()))
       .body as Array<ICountry>;
@@ -149,20 +162,10 @@ export class StafAddEditComponent implements OnInit {
   }
 
   async saveStaf() {
+    if(this.creationForm.invalid) return;
     const id = this.creationForm.controls['id'].value;
     let responce: number = 0;
-    for (let key in this.creationForm.controls) {
-      if (key == 'roles' || key == 'movies') {
-        let data = this.creationForm.controls[key].value;
-        for (let i = 0; i < data.length; i++)
-          this.formData.append(key, data[i]);
-      } else if (key == 'birthdate') {
-        const date = this.creationForm.controls[key].value as Date;
-        if (typeof date != 'string')
-          this.formData.append(key, date.toLocaleDateString());
-        else this.formData.append(key, this.creationForm.controls[key].value);
-      } else this.formData.append(key, this.creationForm.controls[key].value);
-    }
+    this.formGroupToFormData(this.creationForm,this.formData)
     if (id != 0)
       responce = (await lastValueFrom(this.stafService.update(this.formData)))
         .status;
@@ -171,7 +174,6 @@ export class StafAddEditComponent implements OnInit {
         .status;
     if (responce == 200) this.router.navigate(['/staf-table']);
   }
-
   async loadPhoto(event: any) {
     const file: File = event.target.files[0];
     this.creationForm.controls['imageFile'].setValue(file);
@@ -183,4 +185,22 @@ export class StafAddEditComponent implements OnInit {
       this.photo = this.staf.imageName;
     }
   }
+
+  private formGroupToFormData(group:FormGroup,formData:FormData)
+  {
+    for (let key in group.controls) {
+      if (key == 'roles' || key == 'movies') {
+        let data = group.controls[key].value;
+        for (let i = 0; i < data.length; i++)
+           formData.append(key, data[i]);
+      } else if (key == 'birthdate') {
+           const date = group.controls[key].value as Date;
+           if (typeof date != 'string')
+               formData.append(key, date.toLocaleDateString());
+           else formData.append(key, group.controls[key].value);
+      }    else formData.append(key, group.controls[key].value);
+    }
+  }
+
+
 }
