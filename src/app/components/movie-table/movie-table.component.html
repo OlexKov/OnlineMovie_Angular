@@ -1,4 +1,4 @@
-<button class="mb-4" mat-raised-button color="primary" >Add movie </button>
+<button class="mb-4" mat-raised-button color="primary" (click)="createMovie()" >Add movie </button>
 <div class="mat-elevation-z8">
    <table  mat-table recycleRows [dataSource]="dataSource">
     <!-- Position Column -->
@@ -10,7 +10,9 @@
     <ng-container matColumnDef="poster">
       <th mat-header-cell *matHeaderCellDef> Poster </th>
       <td mat-cell *matCellDef="let element">
-        <img ngSrc = "{{element.poster}}" width="49" height="70" fetchpriority="low" priority />
+        <div class="image-container">
+          <img src = "{{element.poster}}" fetchpriority="low" priority />
+        </div>
       </td>
     </ng-container>
     <ng-container matColumnDef="year">
@@ -54,7 +56,7 @@
     <ng-container matColumnDef="edit">
       <th mat-header-cell *matHeaderCellDef> </th>
       <td mat-cell *matCellDef="let element">
-        <button mat-icon-button color="primary" >
+        <button mat-icon-button color="primary" (click)="editMovie(element)">
           <mat-icon color="success">edit</mat-icon>
         </button>
        </td>

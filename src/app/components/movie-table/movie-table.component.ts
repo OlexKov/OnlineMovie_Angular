@@ -11,6 +11,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { NgOptimizedImage } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-movie-table',
@@ -60,7 +61,9 @@ export class MovieTableComponent implements  AfterViewInit {
   ngAfterViewInit() {
     this.updateTableData();
   }
-  constructor(private movieService: MoviesService, public dialog: MatDialog) {}
+  constructor(private movieService: MoviesService,
+              public dialog: MatDialog,
+              private router:Router) {}
 
   openDeleteDialog(movie: IMovie) {
     return this.dialog.open(ConfirmDialogComponent, {
@@ -82,5 +85,27 @@ export class MovieTableComponent implements  AfterViewInit {
           });
         }
       });
+  }
+
+  editMovie(movie: IMovie)
+  {
+     this.router.navigate(['add-edit-movie'],
+     {
+         queryParams:{
+          movieItem:JSON.stringify(movie),
+          title:"Edit Movie"
+         }
+     })
+  }
+
+  createMovie()
+  {
+    this.router.navigate(['add-edit-movie'],
+    {
+        queryParams:{
+          movieItem:'',
+          title:"Add New Movie"
+        }
+    })
   }
 }

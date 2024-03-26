@@ -12,7 +12,7 @@ export interface IMovie
   countryName:string
   poster:string
   movieUrl:string
-  TtrailerUrl:string
+  trailerUrl:string
   premiumId:number
   premiumName:string
 }

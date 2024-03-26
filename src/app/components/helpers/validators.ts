@@ -7,7 +7,7 @@ export  class FormValidators
     var value = formGroup.controls[controlName];
    // if (value.touched && value.errors) {
       if (value.errors?.required) {
-        return `${displayName} must not be empty`;
+        return `${displayName} can't be empty`;
       } else if (value.errors?.minlength) {
         return `${displayName} must have min length ${value.errors?.minlength?.requiredLength} symbols. Now -
                 ${value.value?.length} symbols`;
@@ -17,7 +17,7 @@ export  class FormValidators
       } else if (value.errors?.pattern) {
         return `${displayName} must start with uppercase leter`;
       }else if (value.errors?.min) {
-          return `You must select minimum ${value.errors?.min.min} ${displayName}`;}
+          return `Select minimum ${value.errors?.min.min}  ${displayName}`;}
    // }
     return '';
    }

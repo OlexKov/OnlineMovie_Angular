@@ -1,4 +1,4 @@
-import { Component, OnInit, input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { IStaf } from '../../models/IStaf';
 import {
@@ -84,8 +84,7 @@ export class StafAddEditComponent implements OnInit {
     });
   }
 
-  get  formValidators():typeof FormValidators
-  {
+  get  formValidators():typeof FormValidators{
     return FormValidators
   }
 
@@ -150,7 +149,7 @@ export class StafAddEditComponent implements OnInit {
       roles: [[],Validators.required],
     });
 
-    if (this.staf.id != null) this.formInit();
+    if (this.staf.id != 0) this.formInit();
         this.photo = this.staf.imageName;
 
     this.countries = (await lastValueFrom(this.dataService.getCountries()))

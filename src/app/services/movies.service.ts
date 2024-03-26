@@ -7,6 +7,9 @@ import { Injectable } from '@angular/core';
 import { Observable, catchError, throwError } from 'rxjs';
 import { IMovie } from '../models/IMovie';
 import { ErrorService } from './error.service';
+import { IStaf } from '../models/IStaf';
+import { IImage } from '../models/IImage';
+import { IGenre } from '../models/IGenre';
 
 @Injectable({
   providedIn: 'root',
@@ -25,9 +28,27 @@ export class MoviesService {
       .get<IMovie[]>(`https://localhost:7158/api/Movie/take?skip=${skip}&count=${count}`,{observe: 'response' })
       .pipe(catchError(this.errorService.errorHendler));
   }
-  get(id: number): Observable<IMovie[]> {
+  get(id: number): Observable<HttpResponse<IMovie[]>> {
     return this.http
-      .get<IMovie[]>(`https://localhost:7158/api/Movie/get/${id}`)
+      .get<IMovie[]>(`https://localhost:7158/api/Movie/get/${id}`,{observe: 'response' })
+      .pipe(catchError(this.errorService.errorHendler));
+  }
+
+  getStafs(id: number): Observable<HttpResponse<IStaf[]>> {
+    return this.http
+      .get<IStaf[]>(`https://localhost:7158/api/Movie/getstafs/${id}`,{observe: 'response' })
+      .pipe(catchError(this.errorService.errorHendler));
+  }
+
+  getScreens(id: number): Observable<HttpResponse<IImage[]>> {
+    return this.http
+      .get<IImage[]>(`https://localhost:7158/api/Movie/getscreens/${id}`,{observe: 'response' })
+      .pipe(catchError(this.errorService.errorHendler));
+  }
+
+  getGenres(id: number): Observable<HttpResponse<IGenre[]>> {
+    return this.http
+      .get<IGenre[]>(`https://localhost:7158/api/Movie/getgenres/${id}`,{observe: 'response' })
       .pipe(catchError(this.errorService.errorHendler));
   }
 
