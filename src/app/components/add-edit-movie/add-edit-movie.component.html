@@ -26,7 +26,7 @@
 
         <mat-grid-tile [colspan]="2">
           <mat-form-field appearance="outline">
-            <mat-label>Surname</mat-label>
+            <mat-label>Original name</mat-label>
             <input formControlName="originalName" matInput>
             @if(formValidators.isError(creationForm,'originalName')){
             <mat-error> {{formValidators.validate(creationForm,'originalName','Original name')}}</mat-error>
@@ -167,7 +167,7 @@
     <mat-form-field appearance="outline">
       <mat-label>Screenshots</mat-label>
       <input hidden formControlName="screenShots" matInput/>
-      <mat-grid-list cols="4" rowHeight="2:1">
+      <mat-grid-list cols="4" rowHeight="1.8:1">
         @for (item of movieScreens ; track movieScreens;let i = $index) {
         <mat-grid-tile>
           <div class=" screen-container">

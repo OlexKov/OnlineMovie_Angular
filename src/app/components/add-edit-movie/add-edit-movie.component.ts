@@ -26,6 +26,8 @@ import { IQuality } from '../../models/IQuality';
 import { IPremium } from '../../models/IPremium';
 import { MatIcon } from '@angular/material/icon';
 import { IImage } from '../../models/IImage';
+import { RouterLink } from '@angular/router';
+import { HttpResponse, HttpResponseBase } from '@angular/common/http';
 
 @Component({
   selector: 'app-add-edit-movie',
@@ -38,6 +40,7 @@ import { IImage } from '../../models/IImage';
     MatButtonModule,
     MatDatepickerModule,
     MatIcon,
+    RouterLink
   ],
   templateUrl: './add-edit-movie.component.html',
   styleUrl: './add-edit-movie.component.css',
@@ -115,7 +118,7 @@ export class AddEditMovieComponent implements OnInit {
           Validators.pattern('^[A-Z А-Я].*'),
         ],
       ],
-      date: [''],
+      date: ['', [Validators.required]],
       duration: ['', [Validators.required]],
       description: [
         '',
@@ -128,14 +131,12 @@ export class AddEditMovieComponent implements OnInit {
       qualityId: [0, [Validators.min(1)]],
       countryId: [0, [Validators.min(1)]],
       poster: [''],
-      posterFile: [null],
       movieUrl: ['', [Validators.required]],
       trailerUrl: ['', [Validators.required]],
       premiumId: [0, [Validators.min(1)]],
       stafs: [[], [Validators.required]],
       screenShots: [[], [Validators.required]],
       genres: [[], [Validators.required]],
-      screenShotsFiles: [null],
     });
 
     if (this.movie.id != 0) this.formInit();
@@ -175,36 +176,49 @@ export class AddEditMovieComponent implements OnInit {
       qualityId: this.movie.qualityId,
       countryId: this.movie.countryId,
       poster: this.movie.poster,
-      posterFile: null,
       movieUrl: this.movie.movieUrl,
       trailerUrl: this.movie.trailerUrl,
       premiumId: this.movie.premiumId,
       stafs: movieStafs || [],
-      screenShots: this.movieScreens?.map((x) => x.id) || [],
+      screenShots: this.isScreensExist,
       genres: movieGenres || [],
-      screenShotsFiles: [],
     });
   }
 
-  async loadPoster(event: any) {
+  async loadPoster(event:any) {
     const file: File = event.target.files[0];
-    this.creationForm.controls['poster'].setValue(file);
     if (file) {
       this.poster = await ImageProcessor.loadImageFromFile(file);
-      this.formData.set('poster', file, file.name);
+      this.formData.set('posterFile', file);
     } else {
-      this.formData.set('poster', '');
+      this.formData.set('posterFile', '');
       this.poster = this.movie.poster;
     }
   }
-  saveMovie() {
+  async saveMovie() {
+    let responce: HttpResponse<object> | null;
     if (this.creationForm.invalid) return;
+    const id = this.creationForm.controls['id'].value;
+    this.formGroupToFormData();
+
+    if (id != 0)
+      responce = (await lastValueFrom(this.movieService.update(this.formData)));
+    else
+      responce = (await lastValueFrom(this.movieService.create(this.formData)))
+
+    if (responce.status == 200) this.router.navigate(['/movie-table']);
   }
 
   deleteScreen(event: any) {
     this.movieScreens?.splice(event.target.id, 1);
-    this.creationForm.controls['screenShots'].setValue(
-      this.movieScreens?.filter((x) => x.id > 0).map((x) => x.id));
+    this.updateScreenshotCreationForm();
+  }
+  private get isScreensExist(){
+    return this.movieScreens ? this.movieScreens.length > 0 ? 'as' : '' : '';
+  }
+
+  private updateScreenshotCreationForm(){
+    this.creationForm.controls['screenShots'].setValue(this.isScreensExist);
   }
 
   async addScreen(event: any) {
@@ -212,13 +226,40 @@ export class AddEditMovieComponent implements OnInit {
     if (files.length > 0) {
       for (let index = 0; index < files.length; index++) {
         this.newScreens?.push(files[index]);
-        let image = {id:files[index].size,name:await ImageProcessor.loadImageFromFile(files[index])}
-
+        let image = {id:-files[index].size,name:await ImageProcessor.loadImageFromFile(files[index])}
         this.movieScreens?.push(image);
-        this.creationForm.controls['screenShots'].setValue(
-          this.movieScreens?.filter((x) => x.id > 0).map((x) => x.id));
+        this.updateScreenshotCreationForm();
       }
+    }
 
+  }
+
+  private formGroupToFormData()
+  {
+    if(this.movieScreens?.length)
+      for (let i=0;i < this.movieScreens.length; i++)
+         if(this.movieScreens[i]?.id > 0)
+             this.formData.append('screenShots',this.movieScreens[i].id as unknown as string);
+    if(this.newScreens?.length)
+       for (let i=0;i < this.newScreens.length; i++)
+               this.formData.append('screens',this.newScreens[i]);
+
+    for (let key in this.creationForm.controls) {
+      if(key == 'screenShots' || key =='duration') continue;
+      if (key == 'stafs' || key == 'genres') {
+        let data = this.creationForm.controls[key].value;
+        for (let i = 0; i < data.length; i++)
+           this.formData.append(key, data[i]);
+      }
+      else if (key == 'date') {
+               let date = this.creationForm.controls[key].value as Date;
+               let duration = this.creationForm.controls['duration'].value
+
+               if (typeof date != 'string')
+                   this.formData.append('dateDuration', date.toLocaleDateString()+' '+ duration);
+               else this.formData.append('dateDuration', date +' '+ duration);
+            }
+      else this.formData.append(key, this.creationForm.controls[key].value);
     }
   }
 }

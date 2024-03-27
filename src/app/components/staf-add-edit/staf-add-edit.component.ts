@@ -102,7 +102,6 @@ export class StafAddEditComponent implements OnInit {
       surname: this.staf.surname,
       description: this.staf.description,
       imageName: this.staf.imageName,
-      imageFile: File,
       countryId: this.staf.countryId,
       birthdate: this.staf.birthdate,
       isOscar: this.staf.isOscar,
@@ -141,9 +140,8 @@ export class StafAddEditComponent implements OnInit {
         ],
       ],
       imageName: [''],
-      imageFile: [null],
       countryId: [null,[Validators.required]],
-      birthdate: [''],
+      birthdate: ['',[Validators.required]],
       isOscar: [false],
       movies: [[]],
       roles: [[],Validators.required],
@@ -171,14 +169,13 @@ export class StafAddEditComponent implements OnInit {
     else
       responce = (await lastValueFrom(this.stafService.create(this.formData)))
         .status;
-    if (responce == 200) this.router.navigate(['/staf-table']);
+    if (responce == 200) this.router.navigate(['/movie-table']);
   }
   async loadPhoto(event: any) {
     const file: File = event.target.files[0];
-    this.creationForm.controls['imageFile'].setValue(file);
     if (file) {
       this.photo = await ImageProcessor.loadImageFromFile(file);
-      this.formData.set('imageFile', file, file.name);
+      this.formData.set('imageFile', file);
     } else {
       this.formData.set('imageFile', '');
       this.photo = this.staf.imageName;

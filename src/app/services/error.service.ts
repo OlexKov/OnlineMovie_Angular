@@ -9,7 +9,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 })
 export class ErrorService {
 
-  constructor(private _snackBar: MatSnackBar){}
+  constructor(private mainErrorBar: MatSnackBar){}
 
   get errorHendler():any {
     return this.hendler.bind(this);
@@ -17,10 +17,15 @@ export class ErrorService {
 
   private hendler(error:HttpErrorResponse)
   {
-    this._snackBar.open(error.message,"close",{
-      duration: 3000,
+    let errorMessage:string = error.message + "\n"
+    let errors = error.error;
+    for (let i = 0; i < errors.length; i++)
+    errorMessage =  errorMessage + errors[i].ErrorCode +": " + errors[i].ErrorMessage + " \n"
+
+    this.mainErrorBar.open(errorMessage,"close",{
+      duration: 5000,
       // verticalPosition:'top'
     });
-    return throwError(() => error.message);
+    return throwError(() => errorMessage);
   }
 }

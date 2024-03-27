@@ -13,38 +13,40 @@ import { IPremium } from '../models/IPremium';
 })
 export class DataService {
 
+   webApi:string = "http://localhost:5000/api/"
+
   constructor(private http: HttpClient,private errorService: ErrorService) { }
   getCountries():Observable<HttpResponse<ICountry[]>>
   {
     return this.http
-    .get<ICountry[]>('https://localhost:7158/api/Data/getcountries', {observe: 'response'})
+    .get<ICountry[]>(this.webApi +'Data/getcountries', {observe: 'response'})
     .pipe(catchError(this.errorService.errorHendler));
   }
   getRoles():Observable<HttpResponse<IStafRole[]>>
   {
     return this.http
-    .get<IStafRole[]>('https://localhost:7158/api/Data/getroles', {observe: 'response'})
+    .get<IStafRole[]>(this.webApi +'Data/getroles', {observe: 'response'})
     .pipe(catchError(this.errorService.errorHendler));
   }
 
   getGenres():Observable<HttpResponse<IGenre[]>>
   {
     return this.http
-    .get<IGenre[]>('https://localhost:7158/api/Data/getgenres', {observe: 'response'})
+    .get<IGenre[]>(this.webApi +'Data/getgenres', {observe: 'response'})
     .pipe(catchError(this.errorService.errorHendler));
   }
 
   getQualities():Observable<HttpResponse<IQuality[]>>
   {
     return this.http
-    .get<IQuality[]>('https://localhost:7158/api/Data/getqualities', {observe: 'response'})
+    .get<IQuality[]>(this.webApi +'Data/getqualities', {observe: 'response'})
     .pipe(catchError(this.errorService.errorHendler));
   }
 
   getPremiums():Observable<HttpResponse<IPremium[]>>
   {
     return this.http
-    .get<IPremium[]>('https://localhost:7158/api/Data/getpremiums', {observe: 'response'})
+    .get<IPremium[]>(this.webApi +'Data/getpremiums', {observe: 'response'})
     .pipe(catchError(this.errorService.errorHendler));
   }
 }
