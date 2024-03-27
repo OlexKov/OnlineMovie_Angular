@@ -212,6 +212,12 @@ export class AddEditMovieComponent implements OnInit {
   deleteScreen(event: any) {
     this.movieScreens?.splice(event.target.id, 1);
     this.updateScreenshotCreationForm();
+    let file = this.newScreens?.find(x=>x.size == -event.target.id);
+    let index:number|undefined = -1;
+    if(file)
+       index = this.newScreens?.indexOf(file);
+    if(index)
+       this.newScreens?.splice(index,1);
   }
   private get isScreensExist(){
     return this.movieScreens ? this.movieScreens.length > 0 ? 'as' : '' : '';
