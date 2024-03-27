@@ -17,7 +17,7 @@ export  class FormValidators
       } else if (value.errors?.pattern) {
         return `${displayName} must start with uppercase leter`;
       }else if (value.errors?.min) {
-          return `Select minimum ${value.errors?.min.min}  ${displayName}`;}
+          return `Select ${displayName} (min ${value.errors?.min.min})`;}
    // }
     return '';
    }

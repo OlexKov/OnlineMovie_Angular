@@ -166,17 +166,28 @@
 
     <mat-form-field appearance="outline">
       <mat-label>Screenshots</mat-label>
-      <input matInput/>
+      <input hidden formControlName="screenShots" matInput/>
       <mat-grid-list cols="4" rowHeight="2:1">
-        @for (item of screens; track $index) {
+        @for (item of movieScreens ; track movieScreens;let i = $index) {
         <mat-grid-tile>
-
-          <img src={{item}} class="screen" fetchpriority="low" priority />
+          <div class=" screen-container">
+            <img src={{item.name}} class="screenshot" fetchpriority="low" priority />
+             <button (click)="deleteScreen($event)" class="close btn">
+                <mat-icon  id={{i}}>close</mat-icon>
+              </button>
+          </div>
 
         </mat-grid-tile>
         }
       </mat-grid-list>
-    </mat-form-field>
+      @if(formValidators.isError(creationForm,'screenShots'))
+      {
+      <mat-error> {{formValidators.validate(creationForm,'screenShots','Screenshots')}}</mat-error>
+      }
+      </mat-form-field>
+      <input type="file" multiple accept="image/png, image/jpeg, image/webp ,imaje/jpg" class="flex-fill"
+      (change)="addScreen($event)" />
+
 
     <div class="d-flex gap-3 justify-content-around">
       <button type="submit" class="flex-fill" mat-raised-button color="primary">Save</button>

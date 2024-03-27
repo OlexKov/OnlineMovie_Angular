@@ -37,7 +37,7 @@
         </mat-grid-tile>
 
         <mat-grid-tile>
-          <mat-form-field >
+          <mat-form-field appearance="outline">
             <mat-label>Country</mat-label>
             <mat-select formControlName="countryId">
               @for (item of countries ; track $index)
@@ -51,8 +51,9 @@
             }
           </mat-form-field>
         </mat-grid-tile>
+
         <mat-grid-tile>
-          <mat-form-field class="example-form-field">
+          <mat-form-field appearance="outline">
             <mat-label>Birthdate</mat-label>
             <input formControlName="birthdate" [max]="today" matInput [matDatepicker]="datepicker">
             <mat-hint>MM/DD/YYYY</mat-hint>
@@ -65,8 +66,9 @@
             </mat-datepicker>
           </mat-form-field>
         </mat-grid-tile>
+
         <mat-grid-tile>
-          <mat-form-field>
+          <mat-form-field appearance="outline">
             <mat-label>Movies</mat-label>
             <mat-select multiple="true" formControlName="movies">
               @for (item of movies ; track $index)
@@ -76,8 +78,9 @@
             </mat-select>
           </mat-form-field>
         </mat-grid-tile>
+
         <mat-grid-tile>
-          <mat-form-field>
+          <mat-form-field appearance="outline">
             <mat-label>Roles</mat-label>
             <mat-select multiple="true" formControlName="roles">
               @for (item of roles; track $index)
@@ -91,10 +94,11 @@
             }
           </mat-form-field>
         </mat-grid-tile>
+
         <mat-grid-tile>
-          <mat-form-field>
+          <mat-form-field >
             <mat-label>Oscar</mat-label>
-            <input hidden=true matInput>
+            <input hidden matInput>
             <mat-checkbox class="mt-2" matInput formControlName="isOscar"><span>Has Oscar</span></mat-checkbox>
           </mat-form-field>
         </mat-grid-tile>

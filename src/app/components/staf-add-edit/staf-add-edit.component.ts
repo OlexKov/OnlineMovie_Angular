@@ -142,7 +142,7 @@ export class StafAddEditComponent implements OnInit {
       ],
       imageName: [''],
       imageFile: [null],
-      countryId: [null,[Validators.min(1)]],
+      countryId: [null,[Validators.required]],
       birthdate: [''],
       isOscar: [false],
       movies: [[]],
