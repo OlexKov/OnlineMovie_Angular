@@ -13,6 +13,9 @@ import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.compone
 import { DatePipe } from '@angular/common';
 import { NgOptimizedImage } from '@angular/common';
 import { RouterLink,Router } from '@angular/router';
+import {MatInputModule} from '@angular/material/input';
+import {MatFormFieldModule} from '@angular/material/form-field';
+
 
 
 
@@ -28,7 +31,8 @@ import { RouterLink,Router } from '@angular/router';
     DatePipe,
     NgOptimizedImage,
     RouterLink,
-
+    MatInputModule,
+    MatFormFieldModule
   ],
   templateUrl: './staf-table.component.html',
   styleUrl: './staf-table.component.css'
@@ -115,5 +119,8 @@ export class StafTableComponent implements AfterViewInit {
         }
       });
   }
-
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
 }

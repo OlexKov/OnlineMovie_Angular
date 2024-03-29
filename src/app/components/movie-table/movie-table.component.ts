@@ -12,6 +12,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { NgOptimizedImage } from '@angular/common';
 import { Router } from '@angular/router';
+import {MatInputModule} from '@angular/material/input';
+import {MatFormFieldModule} from '@angular/material/form-field';
 
 @Component({
   selector: 'app-movie-table',
@@ -24,7 +26,9 @@ import { Router } from '@angular/router';
     MatPaginatorModule,
     MatIconModule,
     MatButtonModule,
-    NgOptimizedImage
+    NgOptimizedImage,
+    MatInputModule,
+    MatFormFieldModule
   ],
   templateUrl: './movie-table.component.html',
   styleUrl: './movie-table.component.css',
@@ -107,5 +111,9 @@ export class MovieTableComponent implements  AfterViewInit {
           title:"Add New Movie"
         }
     })
+  }
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 }

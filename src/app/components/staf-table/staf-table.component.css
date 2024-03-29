@@ -5,11 +5,7 @@
   overflow: auto;
 } */
 
-.image-container{
-  width: 55px;
-  height: 70px;
-  padding:  3px ;
-}
+
 
 .mat-column-delete,
 .mat-column-edit,
