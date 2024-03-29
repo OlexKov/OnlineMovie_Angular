@@ -1,6 +1,6 @@
 import { FormGroup } from "@angular/forms";
 
-export  class FormValidators
+export  class CostomValidator
 {
    constructor(  private formGroup:FormGroup){}
    validate(controlName:string,displayName:string):string

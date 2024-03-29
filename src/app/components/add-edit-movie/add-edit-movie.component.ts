@@ -11,7 +11,7 @@ import { ActivatedRoute} from '@angular/router';
 import { DataService } from '../../services/data.service';
 import { StafService } from '../../services/staf.service';
 import { IMovie } from '../../models/IMovie';
-import { FormValidators } from '../helpers/validators';
+import { CostomValidator } from '../helpers/validators';
 import { lastValueFrom } from 'rxjs';
 import { MoviesService } from '../../services/movies.service';
 import { MatGridListModule } from '@angular/material/grid-list';
@@ -61,7 +61,7 @@ export class AddEditMovieComponent implements OnInit {
   today: Date = new Date();
   movieScreens: IImage[] | null = [];
   newScreens: File[] | null =  [];
-  validator :FormValidators;
+  validator :CostomValidator;
   constructor(
     private route: ActivatedRoute,
     private dataService: DataService,
@@ -149,7 +149,7 @@ export class AddEditMovieComponent implements OnInit {
       .body as Array<IQuality>;
     this.premiums = (await lastValueFrom(this.dataService.getPremiums()))
       .body as Array<IPremium>;
-    this.validator = new FormValidators(this.creationForm)
+    this.validator = new CostomValidator(this.creationForm)
   }
 
   async formInit() {

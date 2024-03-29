@@ -24,7 +24,7 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ImageProcessor } from '../helpers/file-loader';
-import { FormValidators } from '../helpers/validators';
+import { CostomValidator } from '../helpers/validators';
 import { Location } from '@angular/common';
 
 
@@ -56,7 +56,7 @@ export class StafAddEditComponent implements OnInit {
   photo: string;
   formData = new FormData();
   today:Date = new Date();
-  validator:FormValidators;
+  validator:CostomValidator;
   constructor(
     private route: ActivatedRoute,
     private dataService: DataService,
@@ -151,7 +151,7 @@ export class StafAddEditComponent implements OnInit {
       .body as Array<IStafRole>;
     this.movies = (await lastValueFrom(this.movieService.getAll()))
       .body as Array<IMovie>;
-      this.validator = new FormValidators(this.creationForm)
+      this.validator = new CostomValidator(this.creationForm)
   }
 
   async saveStaf() {
