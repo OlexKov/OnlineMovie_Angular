@@ -7,7 +7,7 @@ import {
 } from '@angular/forms';
 import { ICountry } from '../../models/ICountry';
 import { IStaf } from '../../models/IStaf';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute} from '@angular/router';
 import { DataService } from '../../services/data.service';
 import { StafService } from '../../services/staf.service';
 import { IMovie } from '../../models/IMovie';
@@ -27,7 +27,8 @@ import { IPremium } from '../../models/IPremium';
 import { MatIcon } from '@angular/material/icon';
 import { IImage } from '../../models/IImage';
 import { RouterLink } from '@angular/router';
-import { HttpResponse, HttpResponseBase } from '@angular/common/http';
+import { HttpResponse } from '@angular/common/http';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-add-edit-movie',
@@ -60,15 +61,16 @@ export class AddEditMovieComponent implements OnInit {
   today: Date = new Date();
   movieScreens: IImage[] | null = [];
   newScreens: File[] | null =  [];
-
+  validator :FormValidators;
   constructor(
     private route: ActivatedRoute,
     private dataService: DataService,
     private stafService: StafService,
     private movieService: MoviesService,
     private fb: FormBuilder,
-    private router: Router
-  ) {
+    private location: Location,
+   ) {
+
     this.route.queryParams.subscribe((res) => {
       if (res['movieItem'] == '')
         this.movie = {
@@ -91,10 +93,6 @@ export class AddEditMovieComponent implements OnInit {
       else this.movie = JSON.parse(res['movieItem']) as IMovie;
       this.title = res['title'];
     });
-  }
-
-  get formValidators(): typeof FormValidators {
-    return FormValidators;
   }
 
   async ngOnInit(): Promise<void> {
@@ -151,6 +149,7 @@ export class AddEditMovieComponent implements OnInit {
       .body as Array<IQuality>;
     this.premiums = (await lastValueFrom(this.dataService.getPremiums()))
       .body as Array<IPremium>;
+    this.validator = new FormValidators(this.creationForm)
   }
 
   async formInit() {
@@ -206,7 +205,7 @@ export class AddEditMovieComponent implements OnInit {
     else
       responce = (await lastValueFrom(this.movieService.create(this.formData)))
 
-    if (responce.status == 200) this.router.navigate(['/movie-table']);
+    if (responce.status == 200) this.location.back()//.navigate(['/movie-table']);
   }
 
   deleteScreen(event: any) {

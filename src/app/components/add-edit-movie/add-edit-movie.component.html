@@ -2,8 +2,6 @@
 <hr>
 <div>
   <form class="d-flex flex-column  gap-2" [formGroup]="creationForm" (ngSubmit)="saveMovie()">
-    <input formControlName="id" type="number" class="form-control d-none" />
-
     <div class="d-flex gap-3">
       <div class="d-flex gap-3 flex-column">
         <div class="edit-image-container">
@@ -18,8 +16,8 @@
           <mat-form-field appearance="outline">
             <mat-label>Name</mat-label>
             <input formControlName="name" matInput>
-            @if(formValidators.isError(creationForm,'name')){
-            <mat-error> {{formValidators.validate(creationForm,'name','Name')}}</mat-error>
+            @if(validator.isError('name')){
+            <mat-error> {{validator.validate('name','Name')}}</mat-error>
             }
           </mat-form-field>
         </mat-grid-tile>
@@ -28,8 +26,8 @@
           <mat-form-field appearance="outline">
             <mat-label>Original name</mat-label>
             <input formControlName="originalName" matInput>
-            @if(formValidators.isError(creationForm,'originalName')){
-            <mat-error> {{formValidators.validate(creationForm,'originalName','Original name')}}</mat-error>
+            @if(validator.isError('originalName')){
+            <mat-error> {{validator.validate('originalName','Original name')}}</mat-error>
             }
           </mat-form-field>
         </mat-grid-tile>
@@ -42,8 +40,8 @@
               <mat-option [value]="item.id">{{item.name}} {{item.surname}}</mat-option>
               }
             </mat-select>
-            @if(formValidators.isError(creationForm,'stafs')){
-            <mat-error> {{formValidators.validate(creationForm,'stafs','Movie staf')}}</mat-error>
+            @if(validator.isError('stafs')){
+            <mat-error> {{validator.validate('stafs','Movie staf')}}</mat-error>
             }
           </mat-form-field>
         </mat-grid-tile>
@@ -56,8 +54,8 @@
               <mat-option [value]="item.id">{{item.name}}</mat-option>
               }
             </mat-select>
-            @if(formValidators.isError(creationForm,'genres')){
-            <mat-error> {{formValidators.validate(creationForm,'genres','Genre')}}</mat-error>
+            @if(validator.isError('genres')){
+            <mat-error> {{validator.validate('genres','Genre')}}</mat-error>
             }
           </mat-form-field>
         </mat-grid-tile>
@@ -66,8 +64,8 @@
           <mat-form-field appearance="outline">
             <mat-label>Trailer Url</mat-label>
             <input formControlName="trailerUrl" matInput>
-            @if(formValidators.isError(creationForm,'trailerUrl')){
-            <mat-error> {{formValidators.validate(creationForm,'trailerUrl','Trailer Url')}}</mat-error>
+            @if(validator.isError('trailerUrl')){
+            <mat-error> {{validator.validate('trailerUrl','Trailer Url')}}</mat-error>
             }
           </mat-form-field>
         </mat-grid-tile>
@@ -76,8 +74,8 @@
           <mat-form-field appearance="outline">
             <mat-label>Movie Url</mat-label>
             <input formControlName="movieUrl" matInput>
-            @if(formValidators.isError(creationForm,'movieUrl')){
-            <mat-error> {{formValidators.validate(creationForm,'movieUrl','Movie Url')}}</mat-error>
+            @if(validator.isError('movieUrl')){
+            <mat-error> {{validator.validate('movieUrl','Movie Url')}}</mat-error>
             }
           </mat-form-field>
         </mat-grid-tile>
@@ -91,8 +89,8 @@
               <mat-option [value]="item.id">{{item.name}}</mat-option>
               }
             </mat-select>
-            @if(formValidators.isError(creationForm,'qualityId')){
-            <mat-error> {{formValidators.validate(creationForm,'qualityId','Quality')}}</mat-error>
+            @if(validator.isError('qualityId')){
+            <mat-error> {{validator.validate('qualityId','Quality')}}</mat-error>
             }
           </mat-form-field>
         </mat-grid-tile>
@@ -101,8 +99,8 @@
           <mat-form-field appearance="outline">
             <mat-label> Movie duration</mat-label>
             <input type="time" matInput formControlName="duration" />
-            @if(formValidators.isError(creationForm,'duration')){
-            <mat-error> {{formValidators.validate(creationForm,'duration','Duration')}}</mat-error>
+            @if(validator.isError('duration')){
+            <mat-error> {{validator.validate('duration','Duration')}}</mat-error>
             }
           </mat-form-field>
         </mat-grid-tile>
@@ -116,8 +114,8 @@
               <mat-option [value]="item.id">{{item.name}}</mat-option>
               }
             </mat-select>
-            @if(formValidators.isError(creationForm,'countryId')){
-            <mat-error> {{formValidators.validate(creationForm,'countryId','Country')}}</mat-error>
+            @if(validator.isError('countryId')){
+            <mat-error> {{validator.validate('countryId','Country')}}</mat-error>
             }
           </mat-form-field>
         </mat-grid-tile>
@@ -146,8 +144,8 @@
               <mat-option [value]="item.id">{{item.name}}</mat-option>
               }
             </mat-select>
-            @if(formValidators.isError(creationForm,'premiumId')){
-            <mat-error> {{formValidators.validate(creationForm,'premiumId','Premium')}}</mat-error>
+            @if(validator.isError('premiumId')){
+            <mat-error> {{validator.validate('premiumId','Premium')}}</mat-error>
             }
           </mat-form-field>
         </mat-grid-tile>
@@ -157,9 +155,9 @@
     <mat-form-field appearance="outline">
       <mat-label>Description</mat-label>
       <textarea [rows]="5" style="height:auto" formControlName="description" matInput></textarea>
-      @if(formValidators.isError(creationForm,'description'))
+      @if(validator.isError('description'))
       {
-      <mat-error> {{formValidators.validate(creationForm,'description','Description')}}</mat-error>
+      <mat-error> {{validator.validate('description','Description')}}</mat-error>
       }
     </mat-form-field>
     <hr>
@@ -180,9 +178,9 @@
         </mat-grid-tile>
         }
       </mat-grid-list>
-      @if(formValidators.isError(creationForm,'screenShots'))
+      @if(validator.isError('screenShots'))
       {
-      <mat-error> {{formValidators.validate(creationForm,'screenShots','Screenshots')}}</mat-error>
+      <mat-error> {{validator.validate('screenShots','Screenshots')}}</mat-error>
       }
       </mat-form-field>
       <input type="file" multiple accept="image/png, image/jpeg, image/webp ,imaje/jpg" class="flex-fill"

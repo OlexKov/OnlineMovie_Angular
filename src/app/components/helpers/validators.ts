@@ -2,9 +2,10 @@ import { FormGroup } from "@angular/forms";
 
 export  class FormValidators
 {
-   static validate(formGroup:FormGroup,controlName:string,displayName:string):string
+   constructor(  private formGroup:FormGroup){}
+   validate(controlName:string,displayName:string):string
    {
-    var value = formGroup.controls[controlName];
+    var value = this.formGroup.controls[controlName];
    // if (value.touched && value.errors) {
       if (value.errors?.required) {
         return `${displayName} can't be empty`;
@@ -22,7 +23,7 @@ export  class FormValidators
     return '';
    }
 
-   static isError(formGroup:FormGroup,controlName:string):boolean {
-    return  formGroup.controls[controlName].errors != null;
+    isError(controlName:string):boolean {
+      return  this.formGroup.controls[controlName].errors != null;
   }
 }

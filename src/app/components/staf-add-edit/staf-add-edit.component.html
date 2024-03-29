@@ -2,9 +2,7 @@
 <hr>
 <div>
   <form class="d-flex flex-column  gap-2" [formGroup]="creationForm" (ngSubmit)="saveStaf()">
-    <input formControlName="id" type="number" class="form-control d-none" />
-
-    <div class="d-flex gap-3">
+      <div class="d-flex gap-3">
       <div class="d-flex gap-3 flex-column">
         <div class="edit-image-container">
           <img [src]="photo"  fetchpriority="low" priority />
@@ -18,9 +16,9 @@
           <mat-form-field appearance="outline">
             <mat-label>Name</mat-label>
             <input formControlName="name" matInput>
-            @if(formValidators.isError(creationForm,'name'))
+            @if(validator.isError('name'))
             {
-               <mat-error> {{formValidators.validate(creationForm,'name','Name')}}</mat-error>
+               <mat-error> {{validator.validate('name','Name')}}</mat-error>
             }
           </mat-form-field>
         </mat-grid-tile>
@@ -29,9 +27,9 @@
           <mat-form-field appearance="outline">
             <mat-label>Surname</mat-label>
             <input formControlName="surname" matInput>
-            @if(formValidators.isError(creationForm,'surname'))
+            @if(validator.isError('surname'))
             {
-               <mat-error> {{formValidators.validate(creationForm,'surname','Surname')}}</mat-error>
+               <mat-error> {{validator.validate('surname','Surname')}}</mat-error>
             }
           </mat-form-field>
         </mat-grid-tile>
@@ -45,9 +43,9 @@
               <mat-option [value]="item.id">{{item.name}}</mat-option>
               }
             </mat-select>
-            @if(formValidators.isError(creationForm,'countryId'))
+            @if(validator.isError('countryId'))
             {
-               <mat-error> {{formValidators.validate(creationForm,'countryId','Country')}}</mat-error>
+               <mat-error> {{validator.validate('countryId','Country')}}</mat-error>
             }
           </mat-form-field>
         </mat-grid-tile>
@@ -88,9 +86,9 @@
               <mat-option [value]="item.id">{{item.name}}</mat-option>
               }
             </mat-select>
-            @if(formValidators.isError(creationForm,'roles'))
+            @if(validator.isError('roles'))
             {
-               <mat-error> {{formValidators.validate(creationForm,'roles','Role')}}</mat-error>
+               <mat-error> {{validator.validate('roles','Role')}}</mat-error>
             }
           </mat-form-field>
         </mat-grid-tile>
@@ -109,9 +107,9 @@
     <mat-form-field appearance="outline">
       <mat-label>Description</mat-label>
       <textarea [rows]="5" style="height:auto" formControlName="description" matInput></textarea>
-      @if(formValidators.isError(creationForm,'description'))
+      @if(validator.isError('description'))
       {
-         <mat-error> {{formValidators.validate(creationForm,'description','Description')}}</mat-error>
+         <mat-error> {{validator.validate('description','Description')}}</mat-error>
       }
     </mat-form-field>
     <hr>

@@ -23,10 +23,9 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { Router } from '@angular/router';
 import { ImageProcessor } from '../helpers/file-loader';
 import { FormValidators } from '../helpers/validators';
-
+import { Location } from '@angular/common';
 
 
 @Component({
@@ -57,14 +56,14 @@ export class StafAddEditComponent implements OnInit {
   photo: string;
   formData = new FormData();
   today:Date = new Date();
-
+  validator:FormValidators;
   constructor(
     private route: ActivatedRoute,
     private dataService: DataService,
     private movieService: MoviesService,
     private stafService: StafService,
     private fb: FormBuilder,
-    private router: Router
+    private location: Location,
   ) {
     this.route.queryParams.subscribe((res) => {
       if (res['stafItem'] == '')
@@ -84,11 +83,7 @@ export class StafAddEditComponent implements OnInit {
     });
   }
 
-  get  formValidators():typeof FormValidators{
-    return FormValidators
-  }
-
-  async formInit() {
+ async formInit() {
     let stafMovies = (
       await lastValueFrom(this.stafService.getmovies(this.staf.id))
     ).body?.map((x) => x.id);
@@ -156,6 +151,7 @@ export class StafAddEditComponent implements OnInit {
       .body as Array<IStafRole>;
     this.movies = (await lastValueFrom(this.movieService.getAll()))
       .body as Array<IMovie>;
+      this.validator = new FormValidators(this.creationForm)
   }
 
   async saveStaf() {
@@ -169,7 +165,7 @@ export class StafAddEditComponent implements OnInit {
     else
       responce = (await lastValueFrom(this.stafService.create(this.formData)))
         .status;
-    if (responce == 200) this.router.navigate(['/movie-table']);
+    if (responce == 200)this.location.back()  //this.router.navigate(['/movie-table']);
   }
   async loadPhoto(event: any) {
     const file: File = event.target.files[0];
