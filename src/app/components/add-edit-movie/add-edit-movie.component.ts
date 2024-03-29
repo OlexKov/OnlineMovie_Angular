@@ -92,12 +92,13 @@ export class AddEditMovieComponent implements OnInit {
           premiumName: '',
         };
       else this.movieId = res['movieId'];
+      console.log(this.movieId)
       this.title = res['title'];
     });
   }
 
   async ngOnInit(): Promise<void> {
-    if(this.movieId!=0){
+    if(this.movieId != 0){
       const val = (await lastValueFrom(this.movieService.get(this.movieId))).body
       if(val) this.movie = val;
     }
@@ -238,7 +239,10 @@ export class AddEditMovieComponent implements OnInit {
     if (files.length > 0) {
       for (let index = 0; index < files.length; index++) {
         this.newScreens?.push(files[index]);
-        let image = {id:-files[index].size,name:await ImageProcessor.loadImageFromFile(files[index])}
+        let image = {
+          id:-files[index].size,
+          name:await ImageProcessor.loadImageFromFile(files[index])
+        }
         this.movieScreens?.push(image);
         this.updateScreenshotCreationForm();
       }
