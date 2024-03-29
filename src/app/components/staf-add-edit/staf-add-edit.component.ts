@@ -164,12 +164,10 @@ export class StafAddEditComponent implements OnInit {
     let responce: number = 0;
     this.formGroupToFormData(this.creationForm,this.formData)
     if (id != 0)
-      responce = (await lastValueFrom(this.stafService.update(this.formData)))
-        .status;
+      responce = (await lastValueFrom(this.stafService.update(this.formData))).status;
     else
-      responce = (await lastValueFrom(this.stafService.create(this.formData)))
-        .status;
-    if (responce == 200)this.location.back()  //this.router.navigate(['/movie-table']);
+      responce = (await lastValueFrom(this.stafService.create(this.formData))).status;
+    if (responce == 200)this.location.back();
   }
   async loadPhoto(event: any) {
     const file: File = event.target.files[0];
