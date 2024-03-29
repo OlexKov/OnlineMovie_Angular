@@ -69,40 +69,15 @@ export class AddEditMovieComponent implements OnInit {
     private stafService: StafService,
     private movieService: MoviesService,
     private fb: FormBuilder,
-    private location: Location,
-   ) {
-
-    this.route.queryParams.subscribe((res) => {
-      if (res['movieId'] == 0)
-        this.movie = {
-          id: 0,
-          name: '',
-          originalName: '',
-          date: new Date(Date.now()),
-          duration: '',
-          description: '',
-          qualityId: 0,
-          qualityName: '',
-          countryId: 0,
-          countryName: '',
-          poster: '../assets/noposter.jpeg.jpg',
-          movieUrl: '',
-          trailerUrl: '',
-          premiumId: 0,
-          premiumName: '',
-        };
-      else this.movieId = res['movieId'];
-      console.log(this.movieId)
+    private location: Location)
+     {
+      this.route.queryParams.subscribe((res) => {
+      this.movieId = res['movieId'];
       this.title = res['title'];
     });
   }
 
   async ngOnInit(): Promise<void> {
-    if(this.movieId != 0){
-      const val = (await lastValueFrom(this.movieService.get(this.movieId))).body
-      if(val) this.movie = val;
-    }
-
     this.creationForm = this.fb.group({
       id: [0],
       name: [
@@ -143,20 +118,37 @@ export class AddEditMovieComponent implements OnInit {
       screenShots: [[], [Validators.required]],
       genres: [[], [Validators.required]],
     });
-
-    if (this.movie.id != 0) this.formInit();
-    this.poster = this.movie.poster;
-    this.countries = (await lastValueFrom(this.dataService.getCountries()))
-      .body as Array<ICountry>;
-    this.stafs = (await lastValueFrom(this.stafService.getAll()))
-      .body as Array<IStaf>;
-    this.genres = (await lastValueFrom(this.dataService.getGenres()))
-      .body as Array<IGenre>;
-    this.qualities = (await lastValueFrom(this.dataService.getQualities()))
-      .body as Array<IQuality>;
-    this.premiums = (await lastValueFrom(this.dataService.getPremiums()))
-      .body as Array<IPremium>;
     this.validator = new CostomValidator(this.creationForm)
+    if (this.movieId == 0)
+        this.movie = {
+          id: 0,
+          name: '',
+          originalName: '',
+          date: new Date(Date.now()),
+          duration: '',
+          description: '',
+          qualityId: 0,
+          qualityName: '',
+          countryId: 0,
+          countryName: '',
+          poster: '../assets/noposter.jpeg.jpg',
+          movieUrl: '',
+          trailerUrl: '',
+          premiumId: 0,
+          premiumName: '',
+        };
+      else{
+         const val = (await lastValueFrom(this.movieService.get(this.movieId))).body
+         if(val) this.movie = val;
+         await this.formInit();
+      }
+    this.poster = this.movie.poster;
+    this.countries = (await lastValueFrom(this.dataService.getCountries())).body;
+    this.stafs = (await lastValueFrom(this.stafService.getAll())).body;
+    this.genres = (await lastValueFrom(this.dataService.getGenres())).body;
+    this.qualities = (await lastValueFrom(this.dataService.getQualities())).body;
+    this.premiums = (await lastValueFrom(this.dataService.getPremiums())).body;
+
   }
 
   async formInit() {

@@ -88,7 +88,7 @@ export class StafTableComponent implements AfterViewInit {
     this.router.navigate(['add-edit-staf'],
     {
         queryParams:{
-         stafItem:'',
+         stafId:0,
          title:"Add New Staf"
         }
     })

@@ -67,19 +67,7 @@ export class StafAddEditComponent implements OnInit {
     private location: Location,
   ) {
     this.route.queryParams.subscribe((res) => {
-      if (res['stafId'] == 0)
-        this.staf = {
-          id: 0,
-          name: '',
-          surname: '',
-          description: '',
-          imageName: '../assets/nophoto.jpeg.jpg',
-          countryName: '',
-          countryId: 0,
-          birthdate: new Date(),
-          isOscar: false,
-        };
-        else this.stafId = res['stafId'];
+      this.stafId = res['stafId'];
       this.title = res['title'];
     });
   }
@@ -107,11 +95,6 @@ export class StafAddEditComponent implements OnInit {
   }
 
   async ngOnInit() {
-    if(this.stafId != 0){
-      const val = (await lastValueFrom(this.stafService.get(this.stafId))).body;
-      if(val)
-         this.staf = val;
-    }
     this.creationForm = this.fb.group({
       id: [0],
       name: [
@@ -147,17 +130,32 @@ export class StafAddEditComponent implements OnInit {
       movies: [[]],
       roles: [[],Validators.required],
     });
+    this.validator = new CostomValidator(this.creationForm)
+    if (this.stafId == 0)
+        this.staf = {
+          id: 0,
+          name: '',
+          surname: '',
+          description: '',
+          imageName: '../assets/nophoto.jpeg.jpg',
+          countryName: '',
+          countryId: 0,
+          birthdate: new Date(),
+          isOscar: false,
+        };
+        else {
+          const val = (await lastValueFrom(this.stafService.get(this.stafId))).body;
+          if(val)this.staf = val;
+          this.formInit();
+        }
 
-    if (this.staf.id != 0) this.formInit();
-        this.photo = this.staf.imageName;
-
+    this.photo = this.staf.imageName;
     this.countries = (await lastValueFrom(this.dataService.getCountries()))
       .body as Array<ICountry>;
     this.roles = (await lastValueFrom(this.dataService.getRoles()))
       .body as Array<IStafRole>;
     this.movies = (await lastValueFrom(this.movieService.getAll()))
       .body as Array<IMovie>;
-      this.validator = new CostomValidator(this.creationForm)
   }
 
   async saveStaf() {

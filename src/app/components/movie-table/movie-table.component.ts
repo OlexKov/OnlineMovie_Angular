@@ -107,7 +107,7 @@ export class MovieTableComponent implements  AfterViewInit {
     this.router.navigate(['add-edit-movie'],
     {
         queryParams:{
-          movieItem:'',
+          movieId:0,
           title:"Add New Movie"
         }
     })
