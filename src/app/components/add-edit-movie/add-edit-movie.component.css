@@ -7,11 +7,7 @@ h1{
   font-weight: bold;
 }
 
-.image-container{
-  width: 270px;
-  height: 400px;
-  padding:  3px ;
-}
+
 
 .h-20{
   height: 20%;
@@ -28,7 +24,7 @@ h1{
   position: relative;
   color: red;
   left: 0.5%;
-  top: 0.5%;
+  top: 4%;
   z-index: auto;
 
 }

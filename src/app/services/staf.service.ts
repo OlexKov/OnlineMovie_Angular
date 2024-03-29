@@ -19,6 +19,12 @@ export class StafService {
       .pipe(catchError(this.errorService.errorHendler));
   }
 
+  get(id:number): Observable<HttpResponse<IStaf>> {
+    return this.http
+      .get<IStaf>(this.webApi +`Staf/get/${id}`, {observe: 'response'})
+      .pipe(catchError(this.errorService.errorHendler));
+  }
+
   getroles(id:number): Observable<HttpResponse<IStafRole[]>> {
     return this.http
       .get<IStaf[]>(this.webApi +`Staf/getroles/${id}`, {observe: 'response'})

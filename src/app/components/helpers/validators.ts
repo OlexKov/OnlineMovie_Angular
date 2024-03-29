@@ -2,7 +2,7 @@ import { FormGroup } from "@angular/forms";
 
 export  class CostomValidator
 {
-   constructor(  private formGroup:FormGroup){}
+   constructor(private formGroup:FormGroup){}
    validate(controlName:string,displayName:string):string
    {
     var value = this.formGroup.controls[controlName];

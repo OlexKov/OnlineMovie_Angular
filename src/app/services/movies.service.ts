@@ -29,9 +29,9 @@ export class MoviesService {
       .get<IMovie[]>(this.webApi +`Movie/take?skip=${skip}&count=${count}`,{observe: 'response' })
       .pipe(catchError(this.errorService.errorHendler));
   }
-  get(id: number): Observable<HttpResponse<IMovie[]>> {
+  get(id: number): Observable<HttpResponse<IMovie>> {
     return this.http
-      .get<IMovie[]>(this.webApi +`Movie/get/${id}`,{observe: 'response' })
+      .get<IMovie>(this.webApi +`Movie/get/${id}`,{observe: 'response' })
       .pipe(catchError(this.errorService.errorHendler));
   }
 

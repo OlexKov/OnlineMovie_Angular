@@ -57,6 +57,7 @@ export class StafAddEditComponent implements OnInit {
   formData = new FormData();
   today:Date = new Date();
   validator:CostomValidator;
+  stafId:number = 0;
   constructor(
     private route: ActivatedRoute,
     private dataService: DataService,
@@ -66,7 +67,7 @@ export class StafAddEditComponent implements OnInit {
     private location: Location,
   ) {
     this.route.queryParams.subscribe((res) => {
-      if (res['stafItem'] == '')
+      if (res['stafId'] == 0)
         this.staf = {
           id: 0,
           name: '',
@@ -78,7 +79,7 @@ export class StafAddEditComponent implements OnInit {
           birthdate: new Date(),
           isOscar: false,
         };
-      else this.staf = JSON.parse(res['stafItem']) as IStaf;
+        else this.stafId = res['stafId'];
       this.title = res['title'];
     });
   }
@@ -106,6 +107,11 @@ export class StafAddEditComponent implements OnInit {
   }
 
   async ngOnInit() {
+    if(this.stafId != 0){
+      const val = (await lastValueFrom(this.stafService.get(this.stafId))).body;
+      if(val)
+         this.staf = val;
+    }
     this.creationForm = this.fb.group({
       id: [0],
       name: [

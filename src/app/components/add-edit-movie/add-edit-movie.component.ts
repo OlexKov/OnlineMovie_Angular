@@ -62,6 +62,7 @@ export class AddEditMovieComponent implements OnInit {
   movieScreens: IImage[] | null = [];
   newScreens: File[] | null =  [];
   validator :CostomValidator;
+  movieId:number = 0;
   constructor(
     private route: ActivatedRoute,
     private dataService: DataService,
@@ -72,7 +73,7 @@ export class AddEditMovieComponent implements OnInit {
    ) {
 
     this.route.queryParams.subscribe((res) => {
-      if (res['movieItem'] == '')
+      if (res['movieId'] == 0)
         this.movie = {
           id: 0,
           name: '',
@@ -90,12 +91,17 @@ export class AddEditMovieComponent implements OnInit {
           premiumId: 0,
           premiumName: '',
         };
-      else this.movie = JSON.parse(res['movieItem']) as IMovie;
+      else this.movieId = res['movieId'];
       this.title = res['title'];
     });
   }
 
   async ngOnInit(): Promise<void> {
+    if(this.movieId!=0){
+      const val = (await lastValueFrom(this.movieService.get(this.movieId))).body
+      if(val) this.movie = val;
+    }
+
     this.creationForm = this.fb.group({
       id: [0],
       name: [

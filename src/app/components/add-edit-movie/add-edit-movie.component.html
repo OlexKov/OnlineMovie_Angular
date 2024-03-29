@@ -168,7 +168,7 @@
       <mat-grid-list cols="4" rowHeight="1.8:1">
         @for (item of movieScreens ; track movieScreens;let i = $index) {
         <mat-grid-tile>
-          <div class=" screen-container">
+          <div class=" h-100 w-100 mb-4">
             <img src={{item.name}} class="screenshot" fetchpriority="low" priority />
              <button (click)="deleteScreen($event)" class="close btn">
                 <mat-icon  id={{i}}>close</mat-icon>
