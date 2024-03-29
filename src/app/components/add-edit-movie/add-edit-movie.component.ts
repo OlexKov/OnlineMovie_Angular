@@ -224,6 +224,7 @@ export class AddEditMovieComponent implements OnInit {
     if(index)
        this.newScreens?.splice(index,1);
   }
+
   private get isScreensExist(){
     return this.movieScreens ? this.movieScreens.length > 0 ? 'as' : '' : '';
   }

@@ -72,8 +72,6 @@ export class StafTableComponent implements AfterViewInit {
     this.updateTableData();
   }
 
-
-
   editStaf(staf: IStaf)
   {
      this.router.navigate(['add-edit-staf'],
