@@ -26,6 +26,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ImageProcessor } from '../helpers/file-loader';
 import { CostomValidator } from '../helpers/validators';
 import { Location } from '@angular/common';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 @Component({
@@ -47,13 +48,14 @@ import { Location } from '@angular/common';
   providers: [provideNativeDateAdapter()],
 })
 export class StafAddEditComponent implements OnInit {
+  defaultPhoto:string = '../assets/nophoto.jpeg.jpg'
   staf: IStaf;
   title: string;
   creationForm: FormGroup;
   countries: ICountry[] | null;
   roles: IStafRole[] | null;
   movies: IMovie[] | null;
-  photo: string;
+  photo: string = this.defaultPhoto;
   formData = new FormData();
   today:Date = new Date();
   validator:CostomValidator;
@@ -65,7 +67,8 @@ export class StafAddEditComponent implements OnInit {
     private stafService: StafService,
     private fb: FormBuilder,
     private location: Location,
-  ) {
+    private messageBar:MatSnackBar)
+    {
     this.route.queryParams.subscribe((res) => {
       this.stafId = res['stafId'];
       this.title = res['title'];
@@ -123,7 +126,7 @@ export class StafAddEditComponent implements OnInit {
           Validators.maxLength(1024),
         ],
       ],
-      imageName: [''],
+      imageName: [this.defaultPhoto],
       countryId: [null,[Validators.required]],
       birthdate: ['',[Validators.required]],
       isOscar: [false],
@@ -131,25 +134,12 @@ export class StafAddEditComponent implements OnInit {
       roles: [[],Validators.required],
     });
     this.validator = new CostomValidator(this.creationForm)
-    if (this.stafId == 0)
-        this.staf = {
-          id: 0,
-          name: '',
-          surname: '',
-          description: '',
-          imageName: '../assets/nophoto.jpeg.jpg',
-          countryName: '',
-          countryId: 0,
-          birthdate: new Date(),
-          isOscar: false,
-        };
-        else {
-          const val = (await lastValueFrom(this.stafService.get(this.stafId))).body;
-          if(val)this.staf = val;
-          this.formInit();
-        }
-
-    this.photo = this.staf.imageName;
+    if (this.stafId != 0){
+      const val = (await lastValueFrom(this.stafService.get(this.stafId))).body;
+      if(val) this.staf = val;
+      this.formInit();
+      this.photo = this.staf.imageName;
+    }
     this.countries = (await lastValueFrom(this.dataService.getCountries()))
       .body as Array<ICountry>;
     this.roles = (await lastValueFrom(this.dataService.getRoles()))
@@ -160,15 +150,21 @@ export class StafAddEditComponent implements OnInit {
 
   async saveStaf() {
     if(this.creationForm.invalid) return;
-    const id = this.creationForm.controls['id'].value;
     let responce: number = 0;
     this.formGroupToFormData(this.creationForm,this.formData)
-    if (id != 0)
+    if (this.stafId != 0)
       responce = (await lastValueFrom(this.stafService.update(this.formData))).status;
     else
       responce = (await lastValueFrom(this.stafService.create(this.formData))).status;
-    if (responce == 200)this.location.back();
+    if (responce == 200){
+      this.messageBar.open(`Staf successfully ${this.stafId != 0 ? "changet":"created"}`,'close',{
+        duration:3000
+      })
+      this.location.back();
+    }
   }
+
+
   async loadPhoto(event: any) {
     const file: File = event.target.files[0];
     if (file) {
@@ -192,7 +188,8 @@ export class StafAddEditComponent implements OnInit {
            if (typeof date != 'string')
                formData.append(key, date.toLocaleDateString());
            else formData.append(key, group.controls[key].value);
-      }    else formData.append(key, group.controls[key].value);
+      }
+      else formData.append(key, group.controls[key].value);
     }
   }
 

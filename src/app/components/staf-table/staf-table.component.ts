@@ -15,6 +15,7 @@ import { NgOptimizedImage } from '@angular/common';
 import { RouterLink,Router } from '@angular/router';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 
@@ -56,7 +57,8 @@ export class StafTableComponent implements AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(private stafService: StafService,
               public dialog: MatDialog,
-              private router:Router) { }
+              private router:Router,
+              private messageBar:MatSnackBar) { }
 
   updateTableData() {
     this.stafService
@@ -111,8 +113,13 @@ export class StafTableComponent implements AfterViewInit {
       .subscribe((result) => {
         if (result === true) {
           this.stafService.remove(staf.id).subscribe((response) => {
-            if (response.status == 200)
+            if (response.status == 200){
+              this.messageBar.open('Staf successfully deleted','close',{
+                duration:3000
+              })
               this.updateTableData();
+            }
+
           });
         }
       });

@@ -29,6 +29,7 @@ import { IImage } from '../../models/IImage';
 import { RouterLink } from '@angular/router';
 import { HttpResponse } from '@angular/common/http';
 import { Location } from '@angular/common';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-add-edit-movie',
@@ -48,6 +49,7 @@ import { Location } from '@angular/common';
   providers: [provideNativeDateAdapter()],
 })
 export class AddEditMovieComponent implements OnInit {
+  defaultPoster:string='../assets/noposter.jpeg.jpg'
   title: string;
   movie: IMovie;
   creationForm: FormGroup;
@@ -56,7 +58,7 @@ export class AddEditMovieComponent implements OnInit {
   genres: IGenre[] | null;
   qualities: IQuality[] | null;
   premiums: IPremium[] | null;
-  poster: string;
+  poster: string = this.defaultPoster;
   formData = new FormData();
   today: Date = new Date();
   movieScreens: IImage[] | null = [];
@@ -69,7 +71,8 @@ export class AddEditMovieComponent implements OnInit {
     private stafService: StafService,
     private movieService: MoviesService,
     private fb: FormBuilder,
-    private location: Location)
+    private location: Location,
+    private messageBar: MatSnackBar )
      {
       this.route.queryParams.subscribe((res) => {
       this.movieId = res['movieId'];
@@ -110,7 +113,7 @@ export class AddEditMovieComponent implements OnInit {
       ],
       qualityId: [0, [Validators.min(1)]],
       countryId: [0, [Validators.min(1)]],
-      poster: [''],
+      poster: [this.defaultPoster],
       movieUrl: ['', [Validators.required]],
       trailerUrl: ['', [Validators.required]],
       premiumId: [0, [Validators.min(1)]],
@@ -119,30 +122,12 @@ export class AddEditMovieComponent implements OnInit {
       genres: [[], [Validators.required]],
     });
     this.validator = new CostomValidator(this.creationForm)
-    if (this.movieId == 0)
-        this.movie = {
-          id: 0,
-          name: '',
-          originalName: '',
-          date: new Date(Date.now()),
-          duration: '',
-          description: '',
-          qualityId: 0,
-          qualityName: '',
-          countryId: 0,
-          countryName: '',
-          poster: '../assets/noposter.jpeg.jpg',
-          movieUrl: '',
-          trailerUrl: '',
-          premiumId: 0,
-          premiumName: '',
-        };
-      else{
-         const val = (await lastValueFrom(this.movieService.get(this.movieId))).body
-         if(val) this.movie = val;
+    if (this.movieId != 0){
+      const val = (await lastValueFrom(this.movieService.get(this.movieId))).body
+      if(val) this.movie = val;
          await this.formInit();
-      }
-    this.poster = this.movie.poster;
+      this.poster = this.movie.poster;
+    }
     this.countries = (await lastValueFrom(this.dataService.getCountries())).body;
     this.stafs = (await lastValueFrom(this.stafService.getAll())).body;
     this.genres = (await lastValueFrom(this.dataService.getGenres())).body;
@@ -204,7 +189,12 @@ export class AddEditMovieComponent implements OnInit {
     else
       responce = (await lastValueFrom(this.movieService.create(this.formData)))
 
-    if (responce.status == 200) this.location.back()//.navigate(['/movie-table']);
+    if (responce.status == 200){
+      this.messageBar.open(`Movie successfully ${id==0?"created":"chanded"}`,'close',{
+        duration: 3000
+      });
+      this.location.back();
+    }
   }
 
   deleteScreen(event: any) {

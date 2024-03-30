@@ -14,6 +14,7 @@ import { NgOptimizedImage } from '@angular/common';
 import { Router } from '@angular/router';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
+import { MatSnackBar, MatSnackBarRef } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-movie-table',
@@ -67,7 +68,8 @@ export class MovieTableComponent implements  AfterViewInit {
   }
   constructor(private movieService: MoviesService,
               public dialog: MatDialog,
-              private router:Router) {}
+              private router:Router,
+              private messageBar:MatSnackBar) {}
 
   openDeleteDialog(movie: IMovie) {
     return this.dialog.open(ConfirmDialogComponent, {
@@ -85,7 +87,12 @@ export class MovieTableComponent implements  AfterViewInit {
       .subscribe((result) => {
         if (result === true) {
           this.movieService.remove(movie.id).subscribe((response) => {
-             if (response.status == 200) this.updateTableData();
+             if (response.status == 200) {
+                this.messageBar.open('Movie successfully deleted','close',{
+                  duration: 3000
+                });
+              this.updateTableData();
+            }
           });
         }
       });
