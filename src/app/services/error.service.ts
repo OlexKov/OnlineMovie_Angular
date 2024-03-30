@@ -20,8 +20,8 @@ export class ErrorService {
     this.errorsArray = [];
     this.errorsArray.push({ status: error.status, message: error.message });
     const errors = error.error;
-    if (errors) {
-      for (let i = 1; i < errors.length; i++) {
+    if (errors.length>0) {
+      for (let i = 0; i < errors.length; i++) {
         this.errorsArray.push({
           status: errors[i].ErrorCode,
           message: errors[i].ErrorMessage,

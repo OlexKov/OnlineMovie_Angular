@@ -59,7 +59,7 @@ export class AddEditMovieComponent implements OnInit {
   qualities: IQuality[] | null;
   premiums: IPremium[] | null;
   poster: string = this.defaultPoster;
-  formData = new FormData();
+  posterFile:File;
   today: Date = new Date();
   movieScreens: IImage[] | null = [];
   newScreens: File[] | null =  [];
@@ -170,24 +170,22 @@ export class AddEditMovieComponent implements OnInit {
 
   async loadPoster(event:any) {
     const file: File = event.target.files[0];
-    if (file) {
+    if (file)
       this.poster = await ImageProcessor.loadImageFromFile(file);
-      this.formData.set('posterFile', file);
-    } else {
-      this.formData.set('posterFile', '');
+    else
       this.poster = this.movie.poster;
-    }
+    this.posterFile = file;
   }
   async saveMovie() {
     let responce: HttpResponse<object> | null;
     if (this.creationForm.invalid) return;
     const id = this.creationForm.controls['id'].value;
-    this.formGroupToFormData();
+    var data = this.createFormData();
 
     if (id != 0)
-      responce = (await lastValueFrom(this.movieService.update(this.formData)));
+      responce = (await lastValueFrom(this.movieService.update(data)));
     else
-      responce = (await lastValueFrom(this.movieService.create(this.formData)))
+      responce = (await lastValueFrom(this.movieService.create(data)))
 
     if (responce.status == 200){
       this.messageBar.open(`Movie successfully ${id==0?"created":"chanded"}`,'close',{
@@ -232,32 +230,35 @@ export class AddEditMovieComponent implements OnInit {
 
   }
 
-  private formGroupToFormData()
+  private createFormData():FormData
   {
+    let formData:FormData = new FormData()
     if(this.movieScreens?.length)
       for (let i=0;i < this.movieScreens.length; i++)
          if(this.movieScreens[i]?.id > 0)
-             this.formData.append('screenShots',this.movieScreens[i].id as unknown as string);
+             formData.append('screenShots',this.movieScreens[i].id as unknown as string);
+
     if(this.newScreens?.length)
        for (let i=0;i < this.newScreens.length; i++)
-               this.formData.append('screens',this.newScreens[i]);
+               formData.append('screens',this.newScreens[i]);
 
     for (let key in this.creationForm.controls) {
       if(key == 'screenShots' || key =='duration') continue;
       if (key == 'stafs' || key == 'genres') {
         let data = this.creationForm.controls[key].value;
         for (let i = 0; i < data.length; i++)
-           this.formData.append(key, data[i]);
+           formData.append(key, data[i]);
       }
       else if (key == 'date') {
                let date = this.creationForm.controls[key].value as Date;
                let duration = this.creationForm.controls['duration'].value
-
                if (typeof date != 'string')
-                   this.formData.append('dateDuration', date.toLocaleDateString()+' '+ duration);
-               else this.formData.append('dateDuration', date +' '+ duration);
+                   formData.append('dateDuration', date.toLocaleDateString()+' '+ duration);
+               else formData.append('dateDuration', date +' '+ duration);
             }
-      else this.formData.append(key, this.creationForm.controls[key].value);
+      else formData.append(key, this.creationForm.controls[key].value);
     }
+    formData.append('posterFile', this.posterFile);
+    return formData;
   }
 }

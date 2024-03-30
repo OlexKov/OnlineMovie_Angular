@@ -56,7 +56,7 @@ export class StafAddEditComponent implements OnInit {
   roles: IStafRole[] | null;
   movies: IMovie[] | null;
   photo: string = this.defaultPhoto;
-  formData = new FormData();
+  photoFile:File;
   today:Date = new Date();
   validator:CostomValidator;
   stafId:number = 0;
@@ -151,11 +151,11 @@ export class StafAddEditComponent implements OnInit {
   async saveStaf() {
     if(this.creationForm.invalid) return;
     let responce: number = 0;
-    this.formGroupToFormData(this.creationForm,this.formData)
+    var data = this.createFormData(this.creationForm)
     if (this.stafId != 0)
-      responce = (await lastValueFrom(this.stafService.update(this.formData))).status;
+      responce = (await lastValueFrom(this.stafService.update(data))).status;
     else
-      responce = (await lastValueFrom(this.stafService.create(this.formData))).status;
+      responce = (await lastValueFrom(this.stafService.create(data))).status;
     if (responce == 200){
       this.messageBar.open(`Staf successfully ${this.stafId != 0 ? "changet":"created"}`,'close',{
         duration:3000
@@ -167,17 +167,16 @@ export class StafAddEditComponent implements OnInit {
 
   async loadPhoto(event: any) {
     const file: File = event.target.files[0];
-    if (file) {
+    if (file)
       this.photo = await ImageProcessor.loadImageFromFile(file);
-      this.formData.set('imageFile', file);
-    } else {
-      this.formData.set('imageFile', '');
+    else
       this.photo = this.staf.imageName;
-    }
+    this.photoFile = file;
   }
 
-  private formGroupToFormData(group:FormGroup,formData:FormData)
+  private createFormData(group:FormGroup) : FormData
   {
+    let formData:FormData = new FormData()
     for (let key in group.controls) {
       if (key == 'roles' || key == 'movies') {
         let data = group.controls[key].value;
@@ -191,6 +190,8 @@ export class StafAddEditComponent implements OnInit {
       }
       else formData.append(key, group.controls[key].value);
     }
+    formData.append('imageFile', this.photoFile);
+    return formData;
   }
 
 
