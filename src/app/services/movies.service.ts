@@ -21,7 +21,7 @@ export class MoviesService {
 
   getAll(): Observable<HttpResponse<IMovie[]>> {
     return this.http
-      .get<IMovie[]>(this.webApi +'Movie/getall', {observe: 'response'})
+      .get<IMovie[]>(this.webApi +'Movie/pgetall', {observe: 'response'})
       .pipe(catchError(this.errorService.errorHendler));
   }
   take(skip: number, count: number): Observable<HttpResponse<IMovie[]>> {

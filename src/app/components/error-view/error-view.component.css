@@ -1,0 +1,17 @@
+.error-title{
+  color: red;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.mat-green {
+  color:green;
+}
+
+.error-message-title{
+  color:lightgreen
+}
+.error-message-title > span{
+  color:lightgray;
+}

@@ -1,0 +1,13 @@
+<h3 class="error-title">Request error{{data.length>1?'s':''}} !!!</h3>
+@if(data.length > 0)
+{
+  <div class="d-flex flex-column gap-1">
+  @for (item of data; track item;) {
+    <div class="d-flex flex-column gap-1 border border-danger rounded-2 p-2">
+      <span class="error-message-title">Status: <span>{{item.status}}</span> </span>
+      <span class="error-message-title">Message:  <span>{{item.message}}</span></span>
+    </div>
+  }
+  <button class="align-self-end" mat-button color="green" (click)="snackBarRef.dismiss()">close</button>
+  </div>
+}
