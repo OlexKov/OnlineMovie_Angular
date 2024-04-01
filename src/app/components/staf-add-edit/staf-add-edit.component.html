@@ -1,4 +1,7 @@
-<h1>{{title}}</h1>
+<div class="d-flex gap-4 align-items-baseline">
+  <mat-icon class="fs-3" btn (click)="location.back()">arrow_back</mat-icon>
+  <h1>{{title}}</h1>
+</div>
 <hr>
 <div>
   <form class="d-flex flex-column  gap-2" [formGroup]="creationForm" (ngSubmit)="saveStaf()">
@@ -115,9 +118,13 @@
     <hr>
 
     <div class="d-flex gap-3 justify-content-around">
-      <button type="submit" class="flex-fill"  mat-raised-button
-        color="primary">Save</button>
-      <button type="button" class="flex-fill" mat-raised-button color="" routerLink="/staf-table">Cancel</button>
+      <button type="submit" class="flex-fill"  mat-raised-button color="primary">Save</button>
+      @if(stafId > 0){
+      <button type="button" class="flex-fill" (click)="formInit()" mat-raised-button>Reset to default</button>
+      }
+      @else{
+        <button type="reset" class="flex-fill"mat-raised-button>Reset to default</button>
+      }
     </div>
 
 

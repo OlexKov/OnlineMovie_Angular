@@ -71,8 +71,8 @@ export class AddEditMovieComponent implements OnInit {
     private stafService: StafService,
     private movieService: MoviesService,
     private fb: FormBuilder,
-    private location: Location,
-    private messageBar: MatSnackBar )
+    public location: Location,
+    private messageBar: MatSnackBar)
      {
       this.route.queryParams.subscribe((res) => {
       this.movieId = res['movieId'];

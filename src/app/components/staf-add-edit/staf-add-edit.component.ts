@@ -27,6 +27,7 @@ import { ImageProcessor } from '../helpers/file-loader';
 import { CostomValidator } from '../helpers/validators';
 import { Location } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatIcon } from '@angular/material/icon';
 
 
 @Component({
@@ -42,6 +43,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     MatDatepickerModule,
     MatGridListModule,
     MatCheckboxModule,
+    MatIcon
   ],
   templateUrl: './staf-add-edit.component.html',
   styleUrl: './staf-add-edit.component.css',
@@ -66,7 +68,7 @@ export class StafAddEditComponent implements OnInit {
     private movieService: MoviesService,
     private stafService: StafService,
     private fb: FormBuilder,
-    private location: Location,
+    public location: Location,
     private messageBar:MatSnackBar)
     {
     this.route.queryParams.subscribe((res) => {
