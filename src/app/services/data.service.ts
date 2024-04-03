@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable, catchError } from 'rxjs';
 import { ICountry } from '../models/ICountry';
-import { ErrorService } from './error.service';
 import { IStafRole } from '../models/IStafRole';
 import { IGenre } from '../models/IGenre';
 import { IQuality } from '../models/IQuality';
@@ -13,40 +12,36 @@ import { IPremium } from '../models/IPremium';
 })
 export class DataService {
 
-   webApi:string = "http://localhost:5000/api/"
+   webApi:string = "http://localhost:5000/api/Data/"
 
-  constructor(private http: HttpClient,private errorService: ErrorService) { }
+  constructor(private http: HttpClient) { }
   getCountries():Observable<HttpResponse<ICountry[]>>
   {
     return this.http
-    .get<ICountry[]>(this.webApi +'Data/getcountries', {observe: 'response'})
-    .pipe(catchError(this.errorService.errorHendler));
+    .get<ICountry[]>(this.webApi +'getcountries', {observe: 'response'});
   }
+
   getRoles():Observable<HttpResponse<IStafRole[]>>
   {
     return this.http
-    .get<IStafRole[]>(this.webApi +'Data/getroles', {observe: 'response'})
-    .pipe(catchError(this.errorService.errorHendler));
+    .get<IStafRole[]>(this.webApi +'getroles', {observe: 'response'});
   }
 
   getGenres():Observable<HttpResponse<IGenre[]>>
   {
     return this.http
-    .get<IGenre[]>(this.webApi +'Data/getgenres', {observe: 'response'})
-    .pipe(catchError(this.errorService.errorHendler));
+    .get<IGenre[]>(this.webApi +'getgenres', {observe: 'response'});
   }
 
   getQualities():Observable<HttpResponse<IQuality[]>>
   {
     return this.http
-    .get<IQuality[]>(this.webApi +'Data/getqualities', {observe: 'response'})
-    .pipe(catchError(this.errorService.errorHendler));
+    .get<IQuality[]>(this.webApi +'getqualities', {observe: 'response'});
   }
 
   getPremiums():Observable<HttpResponse<IPremium[]>>
   {
     return this.http
-    .get<IPremium[]>(this.webApi +'Data/getpremiums', {observe: 'response'})
-    .pipe(catchError(this.errorService.errorHendler));
+    .get<IPremium[]>(this.webApi +'getpremiums', {observe: 'response'});
   }
 }

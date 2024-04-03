@@ -18,8 +18,15 @@
     <button mat-icon-button>
       <mat-icon>favorite</mat-icon>
     </button>
-    <button mat-icon-button>
-      <mat-icon>person</mat-icon>
-    </button>
+    <div class="d-flex gap-2 align-items-center">
+      <button mat-icon-button routerLink="/login">
+        <mat-icon>person</mat-icon>
+      </button>
+      @if(tokenService.tokenData$.value.name)
+      {
+          <span class="fs-6">Вітаємо, {{tokenService.tokenData$.value.name}} {{tokenService.tokenData$.value.surname}}</span>
+      }
+    </div>
+
   </mat-toolbar>
 

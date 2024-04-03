@@ -18,7 +18,10 @@ export  class CostomValidator
       } else if (value.errors?.pattern) {
         return `${displayName} must start with uppercase leter`;
       }else if (value.errors?.min) {
-          return `Select ${displayName} (min ${value.errors?.min.min})`;}
+          return `Select ${displayName} (min ${value.errors?.min.min})`
+      }else if (value.errors?.email) {
+          return `Invalid ${displayName}`}
+
    // }
     return '';
    }

@@ -1,0 +1,30 @@
+<div class="w-25 text-center mx-auto">
+  <div class="d-flex gap-4 align-items-baseline">
+    <mat-icon class="fs-3" btn (click)="location.back()">arrow_back</mat-icon>
+    <h1>Login</h1>
+  </div>
+  <hr>
+  <div>
+    <form class="d-flex flex-column  gap-2" [formGroup]="creationForm" (ngSubmit)="login()">
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input formControlName="email" matInput>
+        @if(validator.isError('email'))
+        {
+        <mat-error> {{validator.validate('email','Email')}}</mat-error>
+        }
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Password</mat-label>
+        <input type="password" formControlName="password" matInput>
+        @if(validator.isError('password'))
+        {
+        <mat-error> {{validator.validate('password','Password')}}</mat-error>
+        }
+      </mat-form-field>
+      <button type="submit" class="flex-fill" mat-raised-button color="primary">Login</button>
+      <button type="button" class="flex-fill" mat-raised-button routerLink="/register">Register</button>
+    </form>
+  </div>
+</div>
+
