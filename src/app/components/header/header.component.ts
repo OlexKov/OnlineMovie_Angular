@@ -4,12 +4,8 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import { RouterOutlet } from '@angular/router';
 import { RouterLink } from '@angular/router';
-import { TokenService } from '../../services/token.service';
-import { ITokenData } from '../../models/TokenData';
-import { jwtDecode } from "jwt-decode";
-
-
-
+import {MatMenuModule} from '@angular/material/menu';
+import { AccountService } from '../../services/account.service';
 
 @Component({
   selector: 'app-header',
@@ -19,12 +15,13 @@ import { jwtDecode } from "jwt-decode";
     MatButtonModule,
     MatIconModule,
     RouterOutlet,
-    RouterLink
+    RouterLink,
+    MatMenuModule
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
 export class HeaderComponent {
- constructor(public tokenService:TokenService){}
+ constructor(public accountService:AccountService){}
 }
 

@@ -4,6 +4,7 @@
       <mat-icon>home</mat-icon>
     </button>
     <span>Online Movie</span>
+    @if(accountService.isAdmin()){
     <div class="d-flex gap-2 mx-5 align-items-center">
       <div class="btn text-white d-flex gap-2 align-items-center"  routerLink="/movie-table">
         <mat-icon>movie</mat-icon>
@@ -14,18 +15,45 @@
         <span>Stafs</span>
       </div>
     </div>
+  }
     <span class="example-spacer"></span>
-    <button mat-icon-button>
-      <mat-icon>favorite</mat-icon>
-    </button>
     <div class="d-flex gap-2 align-items-center">
-      <button mat-icon-button routerLink="/login">
-        <mat-icon>person</mat-icon>
+      @if(accountService.isAuthenticated()){
+      <button mat-icon-button [matMenuTriggerFor]="menu">
+        @if(accountService.isAdmin()){
+          <mat-icon>android</mat-icon>
+        }
+        @else{
+          <mat-icon>person</mat-icon>
+        }
       </button>
-      @if(tokenService.tokenData$.value.name)
-      {
-          <span class="fs-6">Вітаємо, {{tokenService.tokenData$.value.name}} {{tokenService.tokenData$.value.surname}}</span>
-      }
+      <mat-menu #menu="matMenu">
+        @if(accountService.isAdmin()){
+          <button mat-menu-item>
+            <mat-icon>person_add</mat-icon>
+            <span>Add new admin</span>
+          </button>
+        }
+        <button mat-menu-item>
+          <mat-icon>account_circle</mat-icon>
+          <span>My account</span>
+        </button>
+        <button mat-menu-item (click)="accountService.logOut()">
+          <mat-icon>logout</mat-icon>
+          <span>LogOut</span>
+        </button>
+      </mat-menu>
+      <span class="fs-7 fw-light">Вітаємо, {{accountService.getUserName()}} {{accountService.getUserSurname()}} !!!</span>
+    }
+    @else{
+      <button mat-icon-button routerLink="/login">
+          <mat-icon>person</mat-icon>
+      </button>
+    }
+
+      <button mat-icon-button>
+        <mat-icon>favorite</mat-icon>
+      </button>
     </div>
 
   </mat-toolbar>

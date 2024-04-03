@@ -22,12 +22,6 @@ import { IResponseModel } from './models/IResponsModel';
 export class AppComponent {
   title = 'OnlineMovie_Angular';
   constructor(tokenService: TokenService) {
-    let tokenData = tokenService.getDataFromToken();
-    if (tokenData && tokenData.name) {
-      if (new Date(tokenData.exp) > new Date(Date.now())) tokenService.updateTokenData();
-      else {
-        tokenService.refreshTokens();
-      }
-    }
+      tokenService.updateUserData();
   }
 }

@@ -4,36 +4,49 @@ import { IErrors } from '../models/Errors';
 import { catchError, throwError } from 'rxjs';
 import { ErrorViewComponent } from '../components/error-view/error-view.component';
 import { inject } from '@angular/core';
+import { AccountService } from '../services/account.service';
+import { TokenService } from '../services/token.service';
+import { Router } from '@angular/router';
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const mainErrorBar = inject(MatSnackBar);
-  const hidenErrors = [401];
+  const accountService = inject(AccountService);
+  const router = inject(Router)
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
-      if (!hidenErrors.includes(error.status)) {
-        let errorsArray: IErrors[] = [];
-        errorsArray.push({ status: error.status, message: error.message });
-        const errors = error.error;
-        if (errors) {
-          if (errors.length) {
-            for (let i = 0; i < errors.length; i++) {
+      switch (error.status) {
+        case 401:
+          if (!error.url?.includes('refreshtokens'))
+          accountService.refreshAccessToken();
+          else accountService.logOut();
+          break;
+          case 403:
+            router.navigate(['/forbidden'])
+            break;
+        default:
+          let errorsArray: IErrors[] = [];
+          errorsArray.push({ status: error.status, message: error.message });
+          const errors = error.error;
+          if (errors) {
+            if (errors.length) {
+              for (let i = 0; i < errors.length; i++) {
+                errorsArray.push({
+                  status: errors[i].ErrorCode,
+                  message: errors[i].ErrorMessage,
+                });
+              }
+            } else
               errorsArray.push({
-                status: errors[i].ErrorCode,
-                message: errors[i].ErrorMessage,
+                status: error.status,
+                message: error.error.message,
               });
-            }
-          } else
-            errorsArray.push({
-              status: error.status,
-              message: error.error.message,
-            });
-        }
-
-        mainErrorBar.openFromComponent(ErrorViewComponent, {
-          duration: 5000,
-          data: errorsArray,
-          // verticalPosition:'top'
-        });
+          }
+          mainErrorBar.openFromComponent(ErrorViewComponent, {
+            duration: 5000,
+            data: errorsArray,
+            // verticalPosition:'top'
+          });
+          break;
       }
       return throwError(() => error);
     })

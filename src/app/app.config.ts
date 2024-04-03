@@ -5,7 +5,6 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { provideHttpClient , withInterceptors} from '@angular/common/http';
 import { errorInterceptor } from './interceptors/error.interceptor';
 import { accessTokenInterceptor } from './interceptors/access-token.interceptor';
-import { refreshTokenInterceptor } from './interceptors/refresh-token.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -15,7 +14,6 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(
       withInterceptors([
       accessTokenInterceptor,
-      refreshTokenInterceptor,
       errorInterceptor
     ])),
   ]
