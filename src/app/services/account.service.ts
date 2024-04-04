@@ -5,6 +5,7 @@ import { IResponseModel } from '../models/IResponsModel';
 import { Observable} from 'rxjs';
 import { TokenService } from './token.service';
 import { Router } from '@angular/router';
+import { IRegisterModel } from '../models/RegisterModel';
 
 
 @Injectable({
@@ -12,14 +13,18 @@ import { Router } from '@angular/router';
 })
 export class AccountService {
   private webApi:string = "http://localhost:5000/api/Accounts/"
-  constructor(private http: HttpClient,private tokenService:TokenService,private router:Router) {
+  constructor(private http: HttpClient,private tokenService:TokenService,private router:Router) {}
 
+  register(model:IRegisterModel): Observable<HttpResponse<object>> {
+    return this.http
+      .post<IRegisterModel>(this.webApi +`register`,model, {observe: 'response'});
   }
 
   login(model:LoginModel): Observable<HttpResponse<IResponseModel>> {
     return this.http
       .post<IResponseModel>(this.webApi +`login`,model, {observe: 'response'});
   }
+
   refreshTokens(model:IResponseModel): Observable<HttpResponse<IResponseModel>> {
     return this.http
       .post<IResponseModel>(this.webApi +`refreshtokens`,model, {observe: 'response'});

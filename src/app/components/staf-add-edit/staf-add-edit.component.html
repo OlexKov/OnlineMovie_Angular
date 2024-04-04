@@ -21,7 +21,7 @@
             <input formControlName="name" matInput>
             @if(validator.isError('name'))
             {
-               <mat-error> {{validator.validate('name','Name')}}</mat-error>
+               <mat-error> {{validator.validate('name','Name','must start with uppercase leter')}}</mat-error>
             }
           </mat-form-field>
         </mat-grid-tile>
@@ -32,7 +32,7 @@
             <input formControlName="surname" matInput>
             @if(validator.isError('surname'))
             {
-               <mat-error> {{validator.validate('surname','Surname')}}</mat-error>
+               <mat-error> {{validator.validate('surname','Surname','must start with uppercase leter')}}</mat-error>
             }
           </mat-form-field>
         </mat-grid-tile>

@@ -10,6 +10,7 @@ import { lastValueFrom } from 'rxjs';
 import { TokenService } from '../../services/token.service';
 import { MatButton } from '@angular/material/button';
 import { Router } from '@angular/router';
+import { RouterLink } from '@angular/router';
 
 
 @Component({
@@ -19,7 +20,8 @@ import { Router } from '@angular/router';
     MatIcon,
     ReactiveFormsModule,
     MatInputModule,
-    MatButton
+    MatButton,
+    RouterLink
     ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'

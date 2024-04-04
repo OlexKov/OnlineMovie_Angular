@@ -29,13 +29,13 @@
       </button>
       <mat-menu #menu="matMenu">
         @if(accountService.isAdmin()){
-          <button mat-menu-item>
+          <button mat-menu-item routerLink="/register">
             <mat-icon>person_add</mat-icon>
             <span>Add new admin</span>
           </button>
         }
-        <button mat-menu-item>
-          <mat-icon>account_circle</mat-icon>
+        <button mat-menu-item routerLink="/useraccount">
+          <mat-icon >account_circle</mat-icon>
           <span>My account</span>
         </button>
         <button mat-menu-item (click)="accountService.logOut()">
