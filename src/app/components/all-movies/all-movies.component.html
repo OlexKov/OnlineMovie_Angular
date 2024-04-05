@@ -1,1 +1,43 @@
-<p>all-movies works!</p>
+<div class="d-flex flex-column w-75 gap-3 mx-auto bg-danger-subtle p-5">
+  @for (item of movies; track $index) {
+    <mat-card>
+      <mat-card-content class="card-bg">
+        <div class="d-flex">
+          <h2>{{item.name}}  ({{getYear(item.date.toString())}})</h2>
+          <span class="spacer"></span>
+           <ng-template #t let-fill="fill">
+            <i class="bi-heart-fill">
+              @if (fill > 0) {
+                <i class="bi-heart-fill filled" [style.width.%]="fill"><mat-icon>star</mat-icon></i>
+              }
+              <mat-icon>star</mat-icon>
+            </i>
+          </ng-template>
+          <ngb-rating [rate]="item.rating" [starTemplate]="t"/>
+        </div>
+        <div class="d-flex gap-3">
+         <div class="d-flex flex-column gap-2 poster">
+            <img  src={{item.poster}}>
+            <button type="button"  mat-raised-button color="primary">Watch movie</button>
+         </div>
+         <div class="d-flex flex-column gap-2">
+             <span class="movie-info-title">Original name: <span class="movie-info-text">{{item.originalName}}</span></span>
+             <span class="movie-info-title">Release date: <span class="movie-info-text">{{item.date}}</span></span>
+             <span class="movie-info-title">Duration: <span class="movie-info-text">{{item.duration}}</span></span>
+             <span class="movie-info-title">Quality: <span class="movie-info-text">{{item.qualityName}}</span></span>
+             <span class="movie-info-title">Country: <span class="movie-info-text">{{item.countryName}}</span></span>
+             <div class="d-flex gap-1">
+                <span class="movie-info-title">Genres: </span>
+                @for (genre of item.genres; track genre ;let i = $index ) {
+                  <span class="movie-info-text">{{genre.name}}{{i == item.genres.length-1?'':','}}</span>
+                }
+              </div>
+              <p class="movie-info-text">{{item.description}}</p>
+         </div>
+        </div>
+
+      </mat-card-content>
+    </mat-card>
+  }
+</div>
+

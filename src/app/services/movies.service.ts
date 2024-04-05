@@ -41,6 +41,11 @@ export class MoviesService {
       .get<IImage[]>(this.webApi +`getscreens/${id}`,{observe: 'response' });
   }
 
+  getRating(id: number): Observable<HttpResponse<number>> {
+    return this.http
+      .get<number>(this.webApi +`getrating/${id}`,{observe: 'response' });
+  }
+
   getGenres(id: number): Observable<HttpResponse<IGenre[]>> {
     return this.http
       .get<IGenre[]>(this.webApi +`getgenres/${id}`,{observe: 'response' });

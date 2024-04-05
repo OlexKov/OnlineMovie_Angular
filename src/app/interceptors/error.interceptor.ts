@@ -1,11 +1,10 @@
 import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { IErrors } from '../models/Errors';
-import { catchError, throwError } from 'rxjs';
+import { catchError, retry, throwError } from 'rxjs';
 import { ErrorViewComponent } from '../components/error-view/error-view.component';
 import { inject } from '@angular/core';
 import { AccountService } from '../services/account.service';
-import { TokenService } from '../services/token.service';
 import { Router } from '@angular/router';
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
@@ -17,8 +16,9 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       switch (error.status) {
         case 401:
           if (!error.url?.includes('refreshtokens'))
-          accountService.refreshAccessToken();
-          else accountService.logOut();
+              accountService.refreshAccessToken();
+          else
+              accountService.logOut();
           break;
           case 403:
             router.navigate(['/forbidden'])

@@ -1,3 +1,5 @@
+import { IGenre } from "./IGenre"
+
 export interface IMovie
 {
   id:number
@@ -15,4 +17,6 @@ export interface IMovie
   trailerUrl:string
   premiumId:number
   premiumName:string
+  rating:number
+  genres:IGenre[]
 }
