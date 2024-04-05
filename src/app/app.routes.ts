@@ -10,7 +10,6 @@ import { AllMoviesComponent } from './components/all-movies/all-movies.component
 import { UserAccountComponent } from './components/user-account/user-account.component';
 import { ForbiddenComponent } from './components/forbidden/forbidden.component';
 import { adminGuard } from './guards/admin.guard';
-import { userGuard } from './guards/user.guard';
 import { FogotpasswordComponent } from './components/fogotpassword/fogotpassword.component';
 import { authenticatedGuard } from './guards/authenticated.guard';
 
