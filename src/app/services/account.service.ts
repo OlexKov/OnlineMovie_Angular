@@ -37,23 +37,6 @@ export class AccountService {
      return this.http.post(this.webApi + 'logout',refreshToken,{observe:'response'})
   }
 
-  refreshAccessToken(): void {
-    const accessToken = this.tokenService.getAccessToken();
-    const ferreshToken = this.tokenService.getRefreshToken();
-    if (accessToken && ferreshToken) {
-      this.refreshTokens({
-          accessToken: accessToken,
-          refreshToken: ferreshToken,
-        })
-        .subscribe((res) => {
-          if (res.status == 200 && res.body) {
-            this.tokenService.saveTokens(res.body.accessToken, res.body.refreshToken);
-            window.location.reload();
-          }
-        });
-    }
-  }
-
   isAuthenticated():boolean{
    return this.tokenService.userData != null
   }

@@ -50,7 +50,7 @@ import { MatIcon } from '@angular/material/icon';
   providers: [provideNativeDateAdapter()],
 })
 export class StafAddEditComponent implements OnInit {
-  defaultPhoto:string = '../assets/nophoto.jpeg.jpg'
+  defaultPhoto:string = '../assets/nophoto.jpg'
   staf: IStaf;
   title: string;
   creationForm: FormGroup;

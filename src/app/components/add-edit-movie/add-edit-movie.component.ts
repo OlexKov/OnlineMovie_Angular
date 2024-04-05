@@ -49,7 +49,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   providers: [provideNativeDateAdapter()],
 })
 export class AddEditMovieComponent implements OnInit {
-  defaultPoster:string='../assets/noposter.jpeg.jpg'
+  defaultPoster:string='../assets/noposter.jpg'
   title: string;
   movie: IMovie;
   creationForm: FormGroup;

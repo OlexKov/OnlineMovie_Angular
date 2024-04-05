@@ -6,24 +6,48 @@ import { ErrorViewComponent } from '../components/error-view/error-view.componen
 import { inject } from '@angular/core';
 import { AccountService } from '../services/account.service';
 import { Router } from '@angular/router';
+import { TokenService } from '../services/token.service';
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const mainErrorBar = inject(MatSnackBar);
   const accountService = inject(AccountService);
-  const router = inject(Router)
+  const tokenService = inject(TokenService);
+  const router = inject(Router);
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
       switch (error.status) {
         case 401:
-          if (!error.url?.includes('refreshtokens')){
-              accountService.refreshAccessToken();
-          }
-          else
-              accountService.logOut();
+          if (!error.url?.includes('refreshtokens')) {
+            const accessToken = tokenService.getAccessToken();
+            const refreshToken = tokenService.getRefreshToken();
+            if (accessToken && refreshToken) {
+             return accountService
+                .refreshTokens({
+                  accessToken: accessToken,
+                  refreshToken: refreshToken,
+                })
+                .pipe(
+                  switchMap((tokens) => {
+                    if (tokens.body)
+                      tokenService.saveTokens(
+                        tokens.body?.accessToken,
+                        tokens.body?.refreshToken
+                      );
+                    return next(req.clone({
+                        headers: req.headers.set(
+                          'Authorization',
+                          `Bearer ${tokens.body?.accessToken}`
+                        ),
+                      })
+                    );
+                  })
+                );
+            }
+          } else accountService.logOut();
           break;
-          case 403:
-            router.navigate(['/forbidden'])
-            break;
+        case 403:
+          router.navigate(['/forbidden']);
+          break;
         default:
           let errorsArray: IErrors[] = [];
           errorsArray.push({ status: error.status, message: error.message });
