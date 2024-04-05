@@ -1,7 +1,7 @@
 import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { IErrors } from '../models/Errors';
-import { catchError, retry, throwError } from 'rxjs';
+import { catchError, retry, switchMap, throwError } from 'rxjs';
 import { ErrorViewComponent } from '../components/error-view/error-view.component';
 import { inject } from '@angular/core';
 import { AccountService } from '../services/account.service';
@@ -15,8 +15,9 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
     catchError((error: HttpErrorResponse) => {
       switch (error.status) {
         case 401:
-          if (!error.url?.includes('refreshtokens'))
+          if (!error.url?.includes('refreshtokens')){
               accountService.refreshAccessToken();
+          }
           else
               accountService.logOut();
           break;
