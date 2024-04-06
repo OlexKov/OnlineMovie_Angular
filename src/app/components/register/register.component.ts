@@ -14,6 +14,7 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 import { IRegisterModel } from '../../models/RegisterModel';
 import { lastValueFrom } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ValidatorHelperService } from '../../services/validator-helper.service';
 @Component({
   selector: 'app-register',
   standalone: true,
@@ -38,6 +39,7 @@ export class RegisterComponent {
     public accountService:AccountService,
     private snackBar:MatSnackBar,
     private router:Router,
+    private validatorHelper:ValidatorHelperService,
     fb:FormBuilder){
       this.creationForm = fb.group({
         email:['',[Validators.required,Validators.email]],
@@ -65,7 +67,7 @@ export class RegisterComponent {
         ]],
         birthdate:['',Validators.required],
         phoneNumber:['',[Validators.pattern("^\\d{3}[-\\s]{1}\\d{3}[-\\s]{1}\\d{2}[-\\s]{0,1}\\d{2}$")]]
-      },{validator: this.confirmedValidator('password', 'confirmPassword')},);
+      },{validator: this.validatorHelper.confirmedValidator('password', 'confirmPassword')},);
       this.validator = new CostomValidator(this.creationForm)
     }
 
@@ -89,20 +91,7 @@ export class RegisterComponent {
       }
     }
 
-    private confirmedValidator(controlName: string, matchingControlName: string) {
-      return (formGroup: FormGroup) => {
-        const control = formGroup.controls[controlName];
-        const matchingControl = formGroup.controls[matchingControlName];
-        if (matchingControl.errors && !matchingControl.errors.confirmedValidator) {
-          return;
-        }
-        if (control.value !== matchingControl.value) {
-          matchingControl.setErrors({ confirmedValidator: true });
-        } else {
-          matchingControl.setErrors(null);
-        }
-      };
-    }
+
 
 
 }

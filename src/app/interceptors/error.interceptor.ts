@@ -1,7 +1,7 @@
 import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { IErrors } from '../models/Errors';
-import { catchError, retry, switchMap, throwError } from 'rxjs';
+import { catchError, switchMap, throwError } from 'rxjs';
 import { ErrorViewComponent } from '../components/error-view/error-view.component';
 import { inject } from '@angular/core';
 import { AccountService } from '../services/account.service';
@@ -62,7 +62,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
               }
             } else
               errorsArray.push({
-                status: error.status,
+                status:0,
                 message: error.error.message,
               });
           }

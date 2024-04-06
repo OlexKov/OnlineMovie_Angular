@@ -12,6 +12,8 @@ import { ForbiddenComponent } from './components/forbidden/forbidden.component';
 import { adminGuard } from './guards/admin.guard';
 import { FogotpasswordComponent } from './components/fogotpassword/fogotpassword.component';
 import { authenticatedGuard } from './guards/authenticated.guard';
+import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
+
 
 export const routes: Routes = [
   { path: '', redirectTo: '/allmovies', pathMatch: 'full' },
@@ -25,5 +27,6 @@ export const routes: Routes = [
   { path: 'useraccount', component: UserAccountComponent  ,canActivate: [authenticatedGuard]},
   { path: 'forbidden', component: ForbiddenComponent  },
   { path: 'fogotpassword', component: FogotpasswordComponent  },
+  { path: 'resetpassword',  component: ResetPasswordComponent  },
   { path: '**', component: NotFoundComponent  }
 ];
