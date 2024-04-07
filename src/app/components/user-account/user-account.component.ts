@@ -11,6 +11,10 @@ import { Location } from '@angular/common';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { IEditModel } from '../../models/EditModel';
+import { TokenService } from '../../services/token.service';
+import { IResponseModel } from '../../models/IResponsModel';
+import { accessTokenInterceptor } from '../../interceptors/access-token.interceptor';
 
 @Component({
   selector: 'app-user-account',
@@ -36,6 +40,7 @@ export class UserAccountComponent {
     public accountService:AccountService,
     private snackBar:MatSnackBar,
     private router:Router,
+    private tokenService:TokenService,
     fb:FormBuilder){
       this.creationForm = fb.group({
         name:[accountService.getUserName(),
@@ -58,7 +63,24 @@ export class UserAccountComponent {
       this.validator = new CostomValidator(this.creationForm);
     }
 
-  save(){}
+  save(){
+    if(this.creationForm.invalid) return;
+    let userData:IEditModel = {
+      id: this.accountService.getUserId() || '',
+      name: this.creationForm.controls['name'].value,
+      surname: this.creationForm.controls['surname'].value,
+      birthdate: this.creationForm.controls['birthdate'].value
+    }
+    this.accountService.edit(userData).subscribe(res=>{
+      if(res.status == 200){
+        this.tokenService.userData!.dateOfBirth = userData.birthdate;
+        this.tokenService.userData!.name = userData.name;
+        this.tokenService.userData!.surname = userData.surname;
+        this.snackBar.open('User information successfully changet...','close',{duration:3000});
+        this.router.navigate(['/']);
+      }
+    })
+  }
   resetPassword(){
     this.accountService.getResetToken().subscribe(res=>{
       if(res.status == 200){
@@ -68,6 +90,6 @@ export class UserAccountComponent {
     })
   }
   isChanget():boolean{
-     return this.creationForm.dirty && this.creationForm.touched
+     return this.creationForm.dirty
   }
 }

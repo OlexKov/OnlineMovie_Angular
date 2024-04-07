@@ -7,6 +7,7 @@ import { TokenService } from './token.service';
 import { Router } from '@angular/router';
 import { IRegisterModel } from '../models/RegisterModel';
 import { IResetPasswordModel } from '../models/ResetPasswordModel';
+import { IEditModel } from '../models/EditModel';
 
 
 
@@ -26,6 +27,10 @@ export class AccountService {
       .get<HttpResponse<string>>(this.webApi +`getresettoken/${this.getUserEmail()}`, requestOptions);
   }
 
+  edit(model:IEditModel): Observable<HttpResponse<object>> {
+    return this.http
+      .put<IEditModel>(this.webApi +`edit`,model, {observe: 'response'});
+  }
 
   resetPassword(model:IResetPasswordModel): Observable<HttpResponse<object>> {
     return this.http

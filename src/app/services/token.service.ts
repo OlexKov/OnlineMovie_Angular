@@ -55,6 +55,7 @@ export class TokenService {
   getAccessToken(): string | null {
     return localStorage.getItem(this.accessKey);
   }
+
   getRefreshToken(): string | null {
     return localStorage.getItem(this.refreshKey);
   }
