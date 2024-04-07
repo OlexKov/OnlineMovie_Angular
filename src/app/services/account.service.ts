@@ -37,6 +37,11 @@ export class AccountService {
       .post<IResetPasswordModel>(this.webApi +`resetpasswordemail`,model, {observe: 'response'});
   }
 
+  delete(email:string): Observable<HttpResponse<object>> {
+    return this.http
+      .delete<object>(this.webApi +`delete/${email}`, {observe: 'response'});
+  }
+
   fogot(email:string): Observable<HttpResponse<object>> {
     return this.http
       .post<object>(this.webApi +`fogot/${email}`,null, {observe: 'response'});

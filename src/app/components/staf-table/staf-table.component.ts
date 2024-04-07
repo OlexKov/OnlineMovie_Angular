@@ -52,8 +52,6 @@ export class StafTableComponent implements AfterViewInit {
     'delete',
   ];
   dataSource: MatTableDataSource<IStaf>;
-
-
   @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(private stafService: StafService,
               public dialog: MatDialog,
