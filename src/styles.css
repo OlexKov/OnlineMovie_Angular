@@ -37,5 +37,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   padding:  3px ;
 }
 
-
+.w-30{
+  width: 30%;
+}
 
