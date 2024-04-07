@@ -7,7 +7,7 @@ import { TokenService } from './token.service';
 import { Router } from '@angular/router';
 import { IRegisterModel } from '../models/RegisterModel';
 import { IResetPasswordModel } from '../models/ResetPasswordModel';
-import { IRTokenModel } from '../models/RTokemModel';
+
 
 
 @Injectable({

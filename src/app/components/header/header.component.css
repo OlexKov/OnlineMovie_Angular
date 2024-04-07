@@ -5,6 +5,10 @@
   background-color: deepskyblue;
 }
 
-.fs-7{
+
+
+.welcome-text{
   font-size: 14px;
+  font-weight: lighter;
+  margin-right: 20px;
 }
