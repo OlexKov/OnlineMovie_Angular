@@ -27,6 +27,6 @@ export const routes: Routes = [
   { path: 'useraccount', component: UserAccountComponent  ,canActivate: [authenticatedGuard]},
   { path: 'forbidden', component: ForbiddenComponent  },
   { path: 'fogotpassword', component: FogotpasswordComponent  },
-  { path: 'resetpassword',  component: ResetPasswordComponent  },
+  { path: 'resetpassword',  component: ResetPasswordComponent ,canActivate: [authenticatedGuard] },
   { path: '**', component: NotFoundComponent  }
 ];

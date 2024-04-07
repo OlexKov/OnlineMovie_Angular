@@ -17,7 +17,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
     catchError((error: HttpErrorResponse) => {
       switch (error.status) {
         case 401:
-          if (!error.url?.includes('refreshtokens')) {
+            if (!error.url?.includes('refreshtokens')) {
             const accessToken = tokenService.getAccessToken();
             const refreshToken = tokenService.getRefreshToken();
             if (accessToken && refreshToken) {

@@ -7,6 +7,7 @@ import { TokenService } from './token.service';
 import { Router } from '@angular/router';
 import { IRegisterModel } from '../models/RegisterModel';
 import { IResetPasswordModel } from '../models/ResetPasswordModel';
+import { IRTokenModel } from '../models/RTokemModel';
 
 
 @Injectable({
@@ -15,9 +16,20 @@ import { IResetPasswordModel } from '../models/ResetPasswordModel';
 export class AccountService {
   private webApi:string = "http://localhost:5000/api/Accounts/"
   constructor(private http: HttpClient,private tokenService:TokenService,private router:Router) {}
+
+  getResetToken(): Observable<HttpResponse<string>> {
+    const requestOptions: Object = {
+       responseType: 'text',
+       observe: 'response'
+    }
+    return this.http
+      .get<HttpResponse<string>>(this.webApi +`getresettoken/${this.getUserEmail()}`, requestOptions);
+  }
+
+
   resetPassword(model:IResetPasswordModel): Observable<HttpResponse<object>> {
     return this.http
-      .post<IResetPasswordModel>(this.webApi +`reset`,model, {observe: 'response'});
+      .post<IResetPasswordModel>(this.webApi +`resetpasswordemail`,model, {observe: 'response'});
   }
 
   fogot(email:string): Observable<HttpResponse<object>> {
@@ -68,11 +80,14 @@ export class AccountService {
   }
 
   getUserBirthdade():string | undefined{
-    return this.tokenService.userData?.dateOfBirth;
+    return  this.tokenService.userData?.dateOfBirth
+    .split('.')
+    .reverse()
+    .join('-');
   }
 
   getUserEmail():string | undefined{
-    return this.tokenService.userData?.dateOfBirth;
+    return this.tokenService.userData?.email;
   }
 
   getUserId():string | undefined{

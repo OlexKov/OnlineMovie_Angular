@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
-import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AccountService } from '../../services/account.service';
-import { TokenService } from '../../services/token.service';
 import { Router } from '@angular/router';
 import { CostomValidator } from '../helpers/validators';
 import { MatButton } from '@angular/material/button';
