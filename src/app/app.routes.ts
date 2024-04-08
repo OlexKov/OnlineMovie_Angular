@@ -24,9 +24,9 @@ export const routes: Routes = [
   { path: 'register', component: RegisterComponent  },
   { path: 'login', component: LoginComponent  },
   { path: 'allmovies', component: AllMoviesComponent  },
-  { path: 'useraccount', component: UserAccountComponent  ,canActivate: [authenticatedGuard]},
-  { path: 'forbidden', component: ForbiddenComponent  },
-  { path: 'fogotpassword', component: FogotpasswordComponent  },
-  { path: 'resetpassword',  component: ResetPasswordComponent ,canActivate: [authenticatedGuard] },
+  { path: 'useraccount', component: UserAccountComponent ,canActivate: [authenticatedGuard]},
+  { path: 'forbidden', component: ForbiddenComponent},
+  { path: 'fogotpassword', component: FogotpasswordComponent},
+  { path: 'resetpassword',  component: ResetPasswordComponent},
   { path: '**', component: NotFoundComponent  }
 ];
