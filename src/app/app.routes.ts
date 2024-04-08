@@ -28,5 +28,6 @@ export const routes: Routes = [
   { path: 'forbidden', component: ForbiddenComponent},
   { path: 'fogotpassword', component: FogotpasswordComponent},
   { path: 'resetpassword',  component: ResetPasswordComponent},
-  { path: '**', component: NotFoundComponent  }
+  { path: '**', component: NotFoundComponent  },
+  { path: 'notfound', component: NotFoundComponent  }
 ];

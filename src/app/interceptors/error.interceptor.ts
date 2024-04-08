@@ -48,6 +48,9 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
         case 403:
           router.navigate(['/forbidden']);
           break;
+        case 403:
+            router.navigate(['/notfound']);
+            break;
         default:
           let errorsArray: IErrors[] = [];
           errorsArray.push({ status: error.status, message: error.message });
